@@ -5,7 +5,7 @@ The official .NET client for [Serialized](https://serialized.io).
 [![](https://tokei.rs/b1/github/serialized-io/client-dotnet)](https://github.com/serialized-io/client-dotnet)
 [![Actions Status](https://github.com/serialized-io/client-dotnet/workflows/Build%20&%20Test/badge.svg)](https://github.com/serialized-io/client-dotnet/actions)
 
-The client classes are generated using [AutoRest 3.0.6247](https://github.com/Azure/autorest) using our [Swagger JSON](https://serialized.io/api.json) file.
+The client classes are generated using [AutoRest 3.0.6247](https://github.com/Azure/autorest) and our [Swagger JSON](https://serialized.io/api.json) file.
 
 ## 💡 Getting Started
 
@@ -14,9 +14,9 @@ Register for a free account at https://serialized.io to get your access keys to 
 
 ## Adding dependency
 
-```
-$ dotnet add package SerializedClient
-```
+Grab the latest [release package](https://github.com/serialized-io/client-dotnet/packages/).
+You will have to configure your CLI for use with Github packages if you did not already do so.
+More info [here](https://docs.github.com/en/free-pro-team@latest/packages/using-github-packages-with-your-projects-ecosystem/configuring-dotnet-cli-for-use-with-github-packages).
 
 ## Configuring the client
 
