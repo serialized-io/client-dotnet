@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageId>Serialized.Client</PackageId>
+    <Version>1.0.0</Version>
+    <Title>Serialized .NET Client</Title>
+    <Authors>Team Serialized</Authors>
+    <Company>Serialized</Company>
+    <PackageDescription>Official .NET client library for https://serialized.io</PackageDescription>
+    <RepositoryUrl>https://github.com/serialized-io/client-dotnet</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
