@@ -74,12 +74,12 @@ namespace SerializedClientTest
                 Debug.WriteLine("Error, code: " + hex.Response.StatusCode);
                 Debug.WriteLine("Request: " + hex.Request.Content);
                 Debug.WriteLine("Response: " + hex.Response.Content);
-                throw hex;
+                Assert.Fail();
             }
             catch (Exception e)
             {
                 Debug.WriteLine(e.Message);
-                throw e;
+                Assert.Fail();
             }
         }
 
