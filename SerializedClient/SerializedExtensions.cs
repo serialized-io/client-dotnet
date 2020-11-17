@@ -873,9 +873,9 @@ namespace SerializedClient
             /// <param name='reactionName'>
             /// The reaction name
             /// </param>
-            public static ReactionDefinition GetDefinition(this ISerialized operations, string reactionName)
+            public static ReactionDefinition GetReactionDefinition(this ISerialized operations, string reactionName)
             {
-                return operations.GetDefinitionAsync(reactionName).GetAwaiter().GetResult();
+                return operations.GetReactionDefinitionAsync(reactionName).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -890,9 +890,9 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ReactionDefinition> GetDefinitionAsync(this ISerialized operations, string reactionName, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ReactionDefinition> GetReactionDefinitionAsync(this ISerialized operations, string reactionName, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetDefinitionWithHttpMessagesAsync(reactionName, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetReactionDefinitionWithHttpMessagesAsync(reactionName, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -1061,9 +1061,9 @@ namespace SerializedClient
             /// <param name='projectionName'>
             /// The projection name
             /// </param>
-            public static ProjectionDefinition GetDefinition1(this ISerialized operations, string projectionName)
+            public static ProjectionDefinition GetProjectionDefinition(this ISerialized operations, string projectionName)
             {
-                return operations.GetDefinition1Async(projectionName).GetAwaiter().GetResult();
+                return operations.GetProjectionDefinitionAsync(projectionName).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1078,9 +1078,9 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProjectionDefinition> GetDefinition1Async(this ISerialized operations, string projectionName, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProjectionDefinition> GetProjectionDefinitionAsync(this ISerialized operations, string projectionName, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetDefinition1WithHttpMessagesAsync(projectionName, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetProjectionDefinitionWithHttpMessagesAsync(projectionName, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

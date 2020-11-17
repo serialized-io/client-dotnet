@@ -2702,7 +2702,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ReactionDefinition>> GetDefinitionWithHttpMessagesAsync(string reactionName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ReactionDefinition>> GetReactionDefinitionWithHttpMessagesAsync(string reactionName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (reactionName == null)
             {
@@ -2724,7 +2724,7 @@ namespace SerializedClient
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("reactionName", reactionName);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "GetDefinition", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "GetReactionDefinition", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
@@ -3376,7 +3376,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProjectionDefinition>> GetDefinition1WithHttpMessagesAsync(string projectionName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProjectionDefinition>> GetProjectionDefinitionWithHttpMessagesAsync(string projectionName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -3398,7 +3398,7 @@ namespace SerializedClient
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("projectionName", projectionName);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "GetDefinition1", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "GetProjectionDefinition", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;

@@ -432,7 +432,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ReactionDefinition>> GetDefinitionWithHttpMessagesAsync(string reactionName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ReactionDefinition>> GetReactionDefinitionWithHttpMessagesAsync(string reactionName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Update reaction definition
@@ -514,7 +514,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProjectionDefinition>> GetDefinition1WithHttpMessagesAsync(string projectionName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProjectionDefinition>> GetProjectionDefinitionWithHttpMessagesAsync(string projectionName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Update a projection definition
