@@ -35,7 +35,7 @@ namespace SerializedClientTest
                 client.HttpClient.DefaultRequestHeaders.Add("Serialized-Access-Key", accessKey);
                 client.HttpClient.DefaultRequestHeaders.Add("Serialized-Secret-Access-Key", secretAccessKey);
 
-                cleanDefinitionsUp(client);
+                cleanUpPreviousExecutionResult(client);
                 setUpDefinitions(client);
 
                 // Verify no feeds exists as no aggregates exists.
@@ -83,7 +83,7 @@ namespace SerializedClientTest
             }
         }
 
-        private void cleanDefinitionsUp(Serialized client)
+        private void cleanUpPreviousExecutionResult(Serialized client)
         {
             Debug.WriteLine("Deleting Reaction: " + notifierName);
             client.DeleteReactionDefinition(notifierName);
