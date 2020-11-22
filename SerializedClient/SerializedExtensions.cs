@@ -37,7 +37,7 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
-            public static void StoreEvents(this ISerialized operations, string aggregateType, System.Guid aggregateId, EventBatch eventBatch, System.Guid? serializedTenantId = default(System.Guid?))
+            public static void StoreEvents(this ISerialized operations, string aggregateType, System.Guid aggregateId, EventBatch eventBatch, string serializedTenantId = default(string))
             {
                 operations.StoreEventsAsync(aggregateType, aggregateId, eventBatch, serializedTenantId).GetAwaiter().GetResult();
             }
@@ -67,7 +67,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task StoreEventsAsync(this ISerialized operations, string aggregateType, System.Guid aggregateId, EventBatch eventBatch, System.Guid? serializedTenantId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task StoreEventsAsync(this ISerialized operations, string aggregateType, System.Guid aggregateId, EventBatch eventBatch, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.StoreEventsWithHttpMessagesAsync(aggregateType, aggregateId, eventBatch, serializedTenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -92,7 +92,7 @@ namespace SerializedClient
             /// Valid delete token. Will be included in the response to the first DELETE
             /// request.
             /// </param>
-            public static DeleteAggregatesByTypeOKResponse DeleteAggregatesByType(this ISerialized operations, string aggregateType, System.Guid? serializedTenantId = default(System.Guid?), System.Guid? deleteToken = default(System.Guid?))
+            public static DeleteAggregatesByTypeOKResponse DeleteAggregatesByType(this ISerialized operations, string aggregateType, string serializedTenantId = default(string), System.Guid? deleteToken = default(System.Guid?))
             {
                 return operations.DeleteAggregatesByTypeAsync(aggregateType, serializedTenantId, deleteToken).GetAwaiter().GetResult();
             }
@@ -120,7 +120,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<DeleteAggregatesByTypeOKResponse> DeleteAggregatesByTypeAsync(this ISerialized operations, string aggregateType, System.Guid? serializedTenantId = default(System.Guid?), System.Guid? deleteToken = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<DeleteAggregatesByTypeOKResponse> DeleteAggregatesByTypeAsync(this ISerialized operations, string aggregateType, string serializedTenantId = default(string), System.Guid? deleteToken = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.DeleteAggregatesByTypeWithHttpMessagesAsync(aggregateType, serializedTenantId, deleteToken, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -143,7 +143,7 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
-            public static void AggregateExists(this ISerialized operations, string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?))
+            public static void AggregateExists(this ISerialized operations, string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string))
             {
                 operations.AggregateExistsAsync(aggregateType, aggregateId, serializedTenantId).GetAwaiter().GetResult();
             }
@@ -166,7 +166,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task AggregateExistsAsync(this ISerialized operations, string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task AggregateExistsAsync(this ISerialized operations, string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.AggregateExistsWithHttpMessagesAsync(aggregateType, aggregateId, serializedTenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -193,7 +193,7 @@ namespace SerializedClient
             /// Valid delete token. Will be included in the response to the first DELETE
             /// request.
             /// </param>
-            public static DeleteAggregateOKResponse DeleteAggregate(this ISerialized operations, string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), System.Guid? deleteToken = default(System.Guid?))
+            public static DeleteAggregateOKResponse DeleteAggregate(this ISerialized operations, string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), System.Guid? deleteToken = default(System.Guid?))
             {
                 return operations.DeleteAggregateAsync(aggregateType, aggregateId, serializedTenantId, deleteToken).GetAwaiter().GetResult();
             }
@@ -223,7 +223,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<DeleteAggregateOKResponse> DeleteAggregateAsync(this ISerialized operations, string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), System.Guid? deleteToken = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<DeleteAggregateOKResponse> DeleteAggregateAsync(this ISerialized operations, string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), System.Guid? deleteToken = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.DeleteAggregateWithHttpMessagesAsync(aggregateType, aggregateId, serializedTenantId, deleteToken, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -256,7 +256,7 @@ namespace SerializedClient
             /// <param name='limit'>
             /// Optional version limit. Default is 1000.
             /// </param>
-            public static LoadEventsOKResponse LoadEvents(this ISerialized operations, string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?))
+            public static LoadEventsOKResponse LoadEvents(this ISerialized operations, string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?))
             {
                 return operations.LoadEventsAsync(aggregateType, aggregateId, serializedTenantId, since, limit).GetAwaiter().GetResult();
             }
@@ -289,7 +289,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<LoadEventsOKResponse> LoadEventsAsync(this ISerialized operations, string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<LoadEventsOKResponse> LoadEventsAsync(this ISerialized operations, string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.LoadEventsWithHttpMessagesAsync(aggregateType, aggregateId, serializedTenantId, since, limit, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -310,7 +310,7 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
-            public static ListFeedsOKResponse ListFeeds(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?))
+            public static ListFeedsOKResponse ListFeeds(this ISerialized operations, string serializedTenantId = default(string))
             {
                 return operations.ListFeedsAsync(serializedTenantId).GetAwaiter().GetResult();
             }
@@ -331,7 +331,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ListFeedsOKResponse> ListFeedsAsync(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ListFeedsOKResponse> ListFeedsAsync(this ISerialized operations, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ListFeedsWithHttpMessagesAsync(serializedTenantId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -351,7 +351,7 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
-            public static GetCurrentGlobalSequenceNumberHeaders GetCurrentGlobalSequenceNumber(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?))
+            public static GetCurrentGlobalSequenceNumberHeaders GetCurrentGlobalSequenceNumber(this ISerialized operations, string serializedTenantId = default(string))
             {
                 return operations.GetCurrentGlobalSequenceNumberAsync(serializedTenantId).GetAwaiter().GetResult();
             }
@@ -371,7 +371,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<GetCurrentGlobalSequenceNumberHeaders> GetCurrentGlobalSequenceNumberAsync(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<GetCurrentGlobalSequenceNumberHeaders> GetCurrentGlobalSequenceNumberAsync(this ISerialized operations, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetCurrentGlobalSequenceNumberWithHttpMessagesAsync(serializedTenantId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -414,7 +414,7 @@ namespace SerializedClient
             /// <param name='partitionNumber'>
             /// The partition number to request.
             /// </param>
-            public static Feed FeedEvents(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?))
+            public static Feed FeedEvents(this ISerialized operations, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?))
             {
                 return operations.FeedEventsAsync(serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber).GetAwaiter().GetResult();
             }
@@ -457,7 +457,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Feed> FeedEventsAsync(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Feed> FeedEventsAsync(this ISerialized operations, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.FeedEventsWithHttpMessagesAsync(serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -480,7 +480,7 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
-            public static GetCurrentSequenceNumberHeaders GetCurrentSequenceNumber(this ISerialized operations, string name, System.Guid? serializedTenantId = default(System.Guid?))
+            public static GetCurrentSequenceNumberHeaders GetCurrentSequenceNumber(this ISerialized operations, string name, string serializedTenantId = default(string))
             {
                 return operations.GetCurrentSequenceNumberAsync(name, serializedTenantId).GetAwaiter().GetResult();
             }
@@ -503,7 +503,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<GetCurrentSequenceNumberHeaders> GetCurrentSequenceNumberAsync(this ISerialized operations, string name, System.Guid? serializedTenantId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<GetCurrentSequenceNumberHeaders> GetCurrentSequenceNumberAsync(this ISerialized operations, string name, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetCurrentSequenceNumberWithHttpMessagesAsync(name, serializedTenantId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -549,7 +549,7 @@ namespace SerializedClient
             /// <param name='partitionNumber'>
             /// The partition number to request.
             /// </param>
-            public static Feed FeedEventsByType(this ISerialized operations, string name, System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?))
+            public static Feed FeedEventsByType(this ISerialized operations, string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?))
             {
                 return operations.FeedEventsByTypeAsync(name, serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber).GetAwaiter().GetResult();
             }
@@ -595,7 +595,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Feed> FeedEventsByTypeAsync(this ISerialized operations, string name, System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Feed> FeedEventsByTypeAsync(this ISerialized operations, string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.FeedEventsByTypeWithHttpMessagesAsync(name, serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -621,7 +621,7 @@ namespace SerializedClient
             /// <param name='limit'>
             /// Max number of entries to include in response. Default is 10.
             /// </param>
-            public static Reactions ListScheduledReactions(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?), int? skip = default(int?), int? limit = default(int?))
+            public static Reactions ListScheduledReactions(this ISerialized operations, string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?))
             {
                 return operations.ListScheduledReactionsAsync(serializedTenantId, skip, limit).GetAwaiter().GetResult();
             }
@@ -647,7 +647,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Reactions> ListScheduledReactionsAsync(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?), int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Reactions> ListScheduledReactionsAsync(this ISerialized operations, string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ListScheduledReactionsWithHttpMessagesAsync(serializedTenantId, skip, limit, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -671,7 +671,7 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
-            public static void DeleteScheduledReaction(this ISerialized operations, System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?))
+            public static void DeleteScheduledReaction(this ISerialized operations, System.Guid reactionId, string serializedTenantId = default(string))
             {
                 operations.DeleteScheduledReactionAsync(reactionId, serializedTenantId).GetAwaiter().GetResult();
             }
@@ -695,7 +695,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteScheduledReactionAsync(this ISerialized operations, System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteScheduledReactionAsync(this ISerialized operations, System.Guid reactionId, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.DeleteScheduledReactionWithHttpMessagesAsync(reactionId, serializedTenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -716,7 +716,7 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
-            public static void ExecuteScheduledReaction(this ISerialized operations, System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?))
+            public static void ExecuteScheduledReaction(this ISerialized operations, System.Guid reactionId, string serializedTenantId = default(string))
             {
                 operations.ExecuteScheduledReactionAsync(reactionId, serializedTenantId).GetAwaiter().GetResult();
             }
@@ -740,7 +740,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task ExecuteScheduledReactionAsync(this ISerialized operations, System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task ExecuteScheduledReactionAsync(this ISerialized operations, System.Guid reactionId, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.ExecuteScheduledReactionWithHttpMessagesAsync(reactionId, serializedTenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -763,7 +763,7 @@ namespace SerializedClient
             /// <param name='limit'>
             /// Max number of entries to include in response. Default is 10.
             /// </param>
-            public static Reactions ListTriggeredReactions(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?), int? skip = default(int?), int? limit = default(int?))
+            public static Reactions ListTriggeredReactions(this ISerialized operations, string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?))
             {
                 return operations.ListTriggeredReactionsAsync(serializedTenantId, skip, limit).GetAwaiter().GetResult();
             }
@@ -789,7 +789,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Reactions> ListTriggeredReactionsAsync(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?), int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Reactions> ListTriggeredReactionsAsync(this ISerialized operations, string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ListTriggeredReactionsWithHttpMessagesAsync(serializedTenantId, skip, limit, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -812,7 +812,7 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
-            public static void ReExecuteTriggeredReaction(this ISerialized operations, System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?))
+            public static void ReExecuteTriggeredReaction(this ISerialized operations, System.Guid reactionId, string serializedTenantId = default(string))
             {
                 operations.ReExecuteTriggeredReactionAsync(reactionId, serializedTenantId).GetAwaiter().GetResult();
             }
@@ -835,7 +835,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task ReExecuteTriggeredReactionAsync(this ISerialized operations, System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task ReExecuteTriggeredReactionAsync(this ISerialized operations, System.Guid reactionId, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.ReExecuteTriggeredReactionWithHttpMessagesAsync(reactionId, serializedTenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -1037,7 +1037,7 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
-            public static ListProjectionsOKResponse ListProjections(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?))
+            public static ListProjectionsOKResponse ListProjections(this ISerialized operations, string serializedTenantId = default(string))
             {
                 return operations.ListProjectionsAsync(serializedTenantId).GetAwaiter().GetResult();
             }
@@ -1057,7 +1057,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ListProjectionsOKResponse> ListProjectionsAsync(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ListProjectionsOKResponse> ListProjectionsAsync(this ISerialized operations, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ListProjectionsWithHttpMessagesAsync(serializedTenantId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1285,7 +1285,7 @@ namespace SerializedClient
             /// <param name='limit'>
             /// Max number of entries to include in response. Default is 100.
             /// </param>
-            public static Projections ListSingleProjections(this ISerialized operations, string projectionName, System.Guid? serializedTenantId = default(System.Guid?), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?))
+            public static Projections ListSingleProjections(this ISerialized operations, string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?))
             {
                 return operations.ListSingleProjectionsAsync(projectionName, serializedTenantId, reference, sort, skip, limit).GetAwaiter().GetResult();
             }
@@ -1322,7 +1322,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Projections> ListSingleProjectionsAsync(this ISerialized operations, string projectionName, System.Guid? serializedTenantId = default(System.Guid?), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Projections> ListSingleProjectionsAsync(this ISerialized operations, string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ListSingleProjectionsWithHttpMessagesAsync(projectionName, serializedTenantId, reference, sort, skip, limit, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1346,7 +1346,7 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
-            public static void RecreateSingleProjections(this ISerialized operations, string projectionName, System.Guid? serializedTenantId = default(System.Guid?))
+            public static void RecreateSingleProjections(this ISerialized operations, string projectionName, string serializedTenantId = default(string))
             {
                 operations.RecreateSingleProjectionsAsync(projectionName, serializedTenantId).GetAwaiter().GetResult();
             }
@@ -1370,7 +1370,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task RecreateSingleProjectionsAsync(this ISerialized operations, string projectionName, System.Guid? serializedTenantId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task RecreateSingleProjectionsAsync(this ISerialized operations, string projectionName, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.RecreateSingleProjectionsWithHttpMessagesAsync(projectionName, serializedTenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
@@ -1394,7 +1394,7 @@ namespace SerializedClient
             /// Max number of milliseconds to await the initial creation. Must be between 1
             /// and 60000.
             /// </param>
-            public static Projection GetSingleProjection(this ISerialized operations, string projectionName, System.Guid projectionId, System.Guid? serializedTenantId = default(System.Guid?), int? awaitCreation = default(int?))
+            public static Projection GetSingleProjection(this ISerialized operations, string projectionName, System.Guid projectionId, string serializedTenantId = default(string), int? awaitCreation = default(int?))
             {
                 return operations.GetSingleProjectionAsync(projectionName, projectionId, serializedTenantId, awaitCreation).GetAwaiter().GetResult();
             }
@@ -1421,7 +1421,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Projection> GetSingleProjectionAsync(this ISerialized operations, string projectionName, System.Guid projectionId, System.Guid? serializedTenantId = default(System.Guid?), int? awaitCreation = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Projection> GetSingleProjectionAsync(this ISerialized operations, string projectionName, System.Guid projectionId, string serializedTenantId = default(string), int? awaitCreation = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetSingleProjectionWithHttpMessagesAsync(projectionName, projectionId, serializedTenantId, awaitCreation, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1452,7 +1452,7 @@ namespace SerializedClient
             /// <param name='limit'>
             /// Max number of entries to include in response. Default is 100.
             /// </param>
-            public static Projections ListAggregatedProjections(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?), string sort = default(string), int? skip = default(int?), int? limit = default(int?))
+            public static Projections ListAggregatedProjections(this ISerialized operations, string serializedTenantId = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?))
             {
                 return operations.ListAggregatedProjectionsAsync(serializedTenantId, sort, skip, limit).GetAwaiter().GetResult();
             }
@@ -1483,7 +1483,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Projections> ListAggregatedProjectionsAsync(this ISerialized operations, System.Guid? serializedTenantId = default(System.Guid?), string sort = default(string), int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Projections> ListAggregatedProjectionsAsync(this ISerialized operations, string serializedTenantId = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ListAggregatedProjectionsWithHttpMessagesAsync(serializedTenantId, sort, skip, limit, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1503,7 +1503,7 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
-            public static Projection GetAggregatedProjection(this ISerialized operations, string projectionName, System.Guid? serializedTenantId = default(System.Guid?))
+            public static Projection GetAggregatedProjection(this ISerialized operations, string projectionName, string serializedTenantId = default(string))
             {
                 return operations.GetAggregatedProjectionAsync(projectionName, serializedTenantId).GetAwaiter().GetResult();
             }
@@ -1523,7 +1523,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Projection> GetAggregatedProjectionAsync(this ISerialized operations, string projectionName, System.Guid? serializedTenantId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Projection> GetAggregatedProjectionAsync(this ISerialized operations, string projectionName, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetAggregatedProjectionWithHttpMessagesAsync(projectionName, serializedTenantId, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1547,7 +1547,7 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
-            public static void RecreateAggregatedProjections(this ISerialized operations, string projectionName, System.Guid? serializedTenantId = default(System.Guid?))
+            public static void RecreateAggregatedProjections(this ISerialized operations, string projectionName, string serializedTenantId = default(string))
             {
                 operations.RecreateAggregatedProjectionsAsync(projectionName, serializedTenantId).GetAwaiter().GetResult();
             }
@@ -1571,7 +1571,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task RecreateAggregatedProjectionsAsync(this ISerialized operations, string projectionName, System.Guid? serializedTenantId = default(System.Guid?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task RecreateAggregatedProjectionsAsync(this ISerialized operations, string projectionName, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.RecreateAggregatedProjectionsWithHttpMessagesAsync(projectionName, serializedTenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }

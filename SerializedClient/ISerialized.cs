@@ -66,7 +66,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> StoreEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, EventBatch eventBatch, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> StoreEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, EventBatch eventBatch, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Delete all aggregates by type
@@ -91,7 +91,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<DeleteAggregatesByTypeOKResponse>> DeleteAggregatesByTypeWithHttpMessagesAsync(string aggregateType, System.Guid? serializedTenantId = default(System.Guid?), System.Guid? deleteToken = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DeleteAggregatesByTypeOKResponse>> DeleteAggregatesByTypeWithHttpMessagesAsync(string aggregateType, string serializedTenantId = default(string), System.Guid? deleteToken = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Check if an aggregate exists
@@ -111,7 +111,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> AggregateExistsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> AggregateExistsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Delete an aggregate
@@ -138,7 +138,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<DeleteAggregateOKResponse>> DeleteAggregateWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), System.Guid? deleteToken = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<DeleteAggregateOKResponse>> DeleteAggregateWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), System.Guid? deleteToken = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Load all events for an aggregate
@@ -168,7 +168,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<LoadEventsOKResponse>> LoadEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<LoadEventsOKResponse>> LoadEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get event feeds overview
@@ -186,7 +186,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ListFeedsOKResponse>> ListFeedsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ListFeedsOKResponse>> ListFeedsWithHttpMessagesAsync(string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get current global sequence number
@@ -203,7 +203,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationHeaderResponse<GetCurrentGlobalSequenceNumberHeaders>> GetCurrentGlobalSequenceNumberWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationHeaderResponse<GetCurrentGlobalSequenceNumberHeaders>> GetCurrentGlobalSequenceNumberWithHttpMessagesAsync(string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get feed of events for all types
@@ -245,7 +245,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get current sequence number
@@ -265,7 +265,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationHeaderResponse<GetCurrentSequenceNumberHeaders>> GetCurrentSequenceNumberWithHttpMessagesAsync(string name, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationHeaderResponse<GetCurrentSequenceNumberHeaders>> GetCurrentSequenceNumberWithHttpMessagesAsync(string name, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get feed of events
@@ -309,7 +309,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// List scheduled reactions
@@ -332,7 +332,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Reactions>> ListScheduledReactionsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Reactions>> ListScheduledReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Delete a scheduled reaction
@@ -353,7 +353,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> DeleteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> DeleteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Execute a scheduled reaction
@@ -374,7 +374,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> ExecuteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> ExecuteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// List triggered reactions
@@ -397,7 +397,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Reactions>> ListTriggeredReactionsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Reactions>> ListTriggeredReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Re-execute a triggered reaction
@@ -418,7 +418,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> ReExecuteTriggeredReactionWithHttpMessagesAsync(System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> ReExecuteTriggeredReactionWithHttpMessagesAsync(System.Guid reactionId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// List reaction definitions
@@ -517,7 +517,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ListProjectionsOKResponse>> ListProjectionsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ListProjectionsOKResponse>> ListProjectionsWithHttpMessagesAsync(string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// List projection definitions
@@ -637,7 +637,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, System.Guid? serializedTenantId = default(System.Guid?), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Delete/recreate single projections
@@ -659,7 +659,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> RecreateSingleProjectionsWithHttpMessagesAsync(string projectionName, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> RecreateSingleProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get single projection
@@ -683,7 +683,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Projection>> GetSingleProjectionWithHttpMessagesAsync(string projectionName, System.Guid projectionId, System.Guid? serializedTenantId = default(System.Guid?), int? awaitCreation = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Projection>> GetSingleProjectionWithHttpMessagesAsync(string projectionName, System.Guid projectionId, string serializedTenantId = default(string), int? awaitCreation = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// List aggregated projections
@@ -711,7 +711,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Projections>> ListAggregatedProjectionsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Projections>> ListAggregatedProjectionsWithHttpMessagesAsync(string serializedTenantId = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get aggregated projection
@@ -728,7 +728,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Projection>> GetAggregatedProjectionWithHttpMessagesAsync(string projectionName, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Projection>> GetAggregatedProjectionWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Delete/recreate aggregated projections
@@ -750,7 +750,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> RecreateAggregatedProjectionsWithHttpMessagesAsync(string projectionName, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> RecreateAggregatedProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// List tenants

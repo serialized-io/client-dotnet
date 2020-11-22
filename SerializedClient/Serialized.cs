@@ -348,7 +348,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> StoreEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, EventBatch eventBatch, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> StoreEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, EventBatch eventBatch, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (aggregateType == null)
             {
@@ -400,7 +400,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -515,7 +515,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DeleteAggregatesByTypeOKResponse>> DeleteAggregatesByTypeWithHttpMessagesAsync(string aggregateType, System.Guid? serializedTenantId = default(System.Guid?), System.Guid? deleteToken = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DeleteAggregatesByTypeOKResponse>> DeleteAggregatesByTypeWithHttpMessagesAsync(string aggregateType, string serializedTenantId = default(string), System.Guid? deleteToken = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (aggregateType == null)
             {
@@ -566,7 +566,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -685,7 +685,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> AggregateExistsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> AggregateExistsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (aggregateType == null)
             {
@@ -728,7 +728,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -839,7 +839,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DeleteAggregateOKResponse>> DeleteAggregateWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), System.Guid? deleteToken = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DeleteAggregateOKResponse>> DeleteAggregateWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), System.Guid? deleteToken = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (aggregateType == null)
             {
@@ -892,7 +892,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -1024,7 +1024,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<LoadEventsOKResponse>> LoadEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<LoadEventsOKResponse>> LoadEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (aggregateType == null)
             {
@@ -1082,7 +1082,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -1196,7 +1196,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ListFeedsOKResponse>> ListFeedsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ListFeedsOKResponse>> ListFeedsWithHttpMessagesAsync(string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1224,7 +1224,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -1334,7 +1334,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationHeaderResponse<GetCurrentGlobalSequenceNumberHeaders>> GetCurrentGlobalSequenceNumberWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationHeaderResponse<GetCurrentGlobalSequenceNumberHeaders>> GetCurrentGlobalSequenceNumberWithHttpMessagesAsync(string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1362,7 +1362,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -1493,7 +1493,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1556,7 +1556,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -1675,7 +1675,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationHeaderResponse<GetCurrentSequenceNumberHeaders>> GetCurrentSequenceNumberWithHttpMessagesAsync(string name, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationHeaderResponse<GetCurrentSequenceNumberHeaders>> GetCurrentSequenceNumberWithHttpMessagesAsync(string name, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (name == null)
             {
@@ -1709,7 +1709,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -1849,7 +1849,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (name == null)
             {
@@ -1918,7 +1918,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -2037,7 +2037,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Reactions>> ListScheduledReactionsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Reactions>> ListScheduledReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2080,7 +2080,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -2194,7 +2194,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> DeleteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> DeleteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2224,7 +2224,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -2320,7 +2320,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> ExecuteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> ExecuteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2350,7 +2350,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -2451,7 +2451,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Reactions>> ListTriggeredReactionsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Reactions>> ListTriggeredReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2494,7 +2494,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -2607,7 +2607,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> ReExecuteTriggeredReactionWithHttpMessagesAsync(System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> ReExecuteTriggeredReactionWithHttpMessagesAsync(System.Guid reactionId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2637,7 +2637,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -3434,7 +3434,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ListProjectionsOKResponse>> ListProjectionsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ListProjectionsOKResponse>> ListProjectionsWithHttpMessagesAsync(string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -3462,7 +3462,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -4303,7 +4303,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, System.Guid? serializedTenantId = default(System.Guid?), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -4369,7 +4369,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -4489,7 +4489,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> RecreateSingleProjectionsWithHttpMessagesAsync(string projectionName, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> RecreateSingleProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -4530,7 +4530,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -4638,7 +4638,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Projection>> GetSingleProjectionWithHttpMessagesAsync(string projectionName, System.Guid projectionId, System.Guid? serializedTenantId = default(System.Guid?), int? awaitCreation = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Projection>> GetSingleProjectionWithHttpMessagesAsync(string projectionName, System.Guid projectionId, string serializedTenantId = default(string), int? awaitCreation = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -4691,7 +4691,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -4815,7 +4815,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Projections>> ListAggregatedProjectionsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Projections>> ListAggregatedProjectionsWithHttpMessagesAsync(string serializedTenantId = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -4863,7 +4863,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -4982,7 +4982,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Projection>> GetAggregatedProjectionWithHttpMessagesAsync(string projectionName, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Projection>> GetAggregatedProjectionWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -5023,7 +5023,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 
@@ -5143,7 +5143,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> RecreateAggregatedProjectionsWithHttpMessagesAsync(string projectionName, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> RecreateAggregatedProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -5184,7 +5184,7 @@ namespace SerializedClient
                 {
                     _httpRequest.Headers.Remove("Serialized-Tenant-Id");
                 }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
             }
 
 

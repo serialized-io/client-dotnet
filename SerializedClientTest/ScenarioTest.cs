@@ -24,7 +24,9 @@ namespace SerializedClientTest
         private readonly string accessKey = System.Environment.GetEnvironmentVariable("SERIALIZED_ACCESS_KEY");
         private readonly string secretAccessKey = System.Environment.GetEnvironmentVariable("SERIALIZED_SECRET_ACCESS_KEY");
 
+
         [TestMethod]
+        //[Ignore]
         public void TestScenario()
         {
             try
@@ -69,7 +71,7 @@ namespace SerializedClientTest
             }
             catch (HttpOperationException hex)
             {
-                Debug.WriteLine(hex.Message);
+                Debug.WriteLine(hex);
                 Debug.WriteLine("Error, code: " + hex.Response.StatusCode);
                 Debug.WriteLine("Request: " + hex.Request.Content);
                 Debug.WriteLine("Response: " + hex.Response.Content);
@@ -89,7 +91,7 @@ namespace SerializedClientTest
 
             Debug.WriteLine("Deleting aggregates of type: " + orderType);
             var deleteToken = client.DeleteAggregatesByType(orderType);
-            client.DeleteAggregatesByType(orderType, deleteToken.DeleteToken);
+            client.DeleteAggregatesByType(orderType, deleteToken: deleteToken.DeleteToken);
 
             Debug.WriteLine("Clearing single projections: " + ordersProjections);
             client.RecreateSingleProjections(ordersProjections);
