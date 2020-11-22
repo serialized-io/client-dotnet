@@ -38,6 +38,11 @@ namespace SerializedClient
         public JsonSerializerSettings DeserializationSettings { get; private set; }
 
         /// <summary>
+        /// Subscription credentials which uniquely identify client subscription.
+        /// </summary>
+        public ServiceClientCredentials Credentials { get; private set; }
+
+        /// <summary>
         /// Initializes a new instance of the Serialized class.
         /// </summary>
         /// <param name='httpClient'>
@@ -45,7 +50,7 @@ namespace SerializedClient
         /// </param>
         /// <param name='disposeHttpClient'>
         /// True: will dispose the provided httpClient on calling Serialized.Dispose(). False: will not dispose provided httpClient</param>
-        public Serialized(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
+        protected Serialized(HttpClient httpClient, bool disposeHttpClient) : base(httpClient, disposeHttpClient)
         {
             Initialize();
         }
@@ -56,7 +61,7 @@ namespace SerializedClient
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        public Serialized(params DelegatingHandler[] handlers) : base(handlers)
+        protected Serialized(params DelegatingHandler[] handlers) : base(handlers)
         {
             Initialize();
         }
@@ -70,7 +75,7 @@ namespace SerializedClient
         /// <param name='handlers'>
         /// Optional. The delegating handlers to add to the http client pipeline.
         /// </param>
-        public Serialized(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
+        protected Serialized(HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : base(rootHandler, handlers)
         {
             Initialize();
         }
@@ -87,7 +92,7 @@ namespace SerializedClient
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public Serialized(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
+        protected Serialized(System.Uri baseUri, params DelegatingHandler[] handlers) : this(handlers)
         {
             if (baseUri == null)
             {
@@ -111,13 +116,162 @@ namespace SerializedClient
         /// <exception cref="System.ArgumentNullException">
         /// Thrown when a required parameter is null
         /// </exception>
-        public Serialized(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        protected Serialized(System.Uri baseUri, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
         {
             if (baseUri == null)
             {
                 throw new System.ArgumentNullException("baseUri");
             }
             BaseUri = baseUri;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Serialized class.
+        /// </summary>
+        /// <param name='credentials'>
+        /// Required. Subscription credentials which uniquely identify client subscription.
+        /// </param>
+        /// <param name='handlers'>
+        /// Optional. The delegating handlers to add to the http client pipeline.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public Serialized(ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        {
+            if (credentials == null)
+            {
+                throw new System.ArgumentNullException("credentials");
+            }
+            Credentials = credentials;
+            if (Credentials != null)
+            {
+                Credentials.InitializeServiceClient(this);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Serialized class.
+        /// </summary>
+        /// <param name='credentials'>
+        /// Required. Subscription credentials which uniquely identify client subscription.
+        /// </param>
+        /// <param name='httpClient'>
+        /// HttpClient to be used
+        /// </param>
+        /// <param name='disposeHttpClient'>
+        /// True: will dispose the provided httpClient on calling Serialized.Dispose(). False: will not dispose provided httpClient</param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public Serialized(ServiceClientCredentials credentials, HttpClient httpClient, bool disposeHttpClient) : this(httpClient, disposeHttpClient)
+        {
+            if (credentials == null)
+            {
+                throw new System.ArgumentNullException("credentials");
+            }
+            Credentials = credentials;
+            if (Credentials != null)
+            {
+                Credentials.InitializeServiceClient(this);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Serialized class.
+        /// </summary>
+        /// <param name='credentials'>
+        /// Required. Subscription credentials which uniquely identify client subscription.
+        /// </param>
+        /// <param name='rootHandler'>
+        /// Optional. The http client handler used to handle http transport.
+        /// </param>
+        /// <param name='handlers'>
+        /// Optional. The delegating handlers to add to the http client pipeline.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public Serialized(ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        {
+            if (credentials == null)
+            {
+                throw new System.ArgumentNullException("credentials");
+            }
+            Credentials = credentials;
+            if (Credentials != null)
+            {
+                Credentials.InitializeServiceClient(this);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Serialized class.
+        /// </summary>
+        /// <param name='baseUri'>
+        /// Optional. The base URI of the service.
+        /// </param>
+        /// <param name='credentials'>
+        /// Required. Subscription credentials which uniquely identify client subscription.
+        /// </param>
+        /// <param name='handlers'>
+        /// Optional. The delegating handlers to add to the http client pipeline.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public Serialized(System.Uri baseUri, ServiceClientCredentials credentials, params DelegatingHandler[] handlers) : this(handlers)
+        {
+            if (baseUri == null)
+            {
+                throw new System.ArgumentNullException("baseUri");
+            }
+            if (credentials == null)
+            {
+                throw new System.ArgumentNullException("credentials");
+            }
+            BaseUri = baseUri;
+            Credentials = credentials;
+            if (Credentials != null)
+            {
+                Credentials.InitializeServiceClient(this);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the Serialized class.
+        /// </summary>
+        /// <param name='baseUri'>
+        /// Optional. The base URI of the service.
+        /// </param>
+        /// <param name='credentials'>
+        /// Required. Subscription credentials which uniquely identify client subscription.
+        /// </param>
+        /// <param name='rootHandler'>
+        /// Optional. The http client handler used to handle http transport.
+        /// </param>
+        /// <param name='handlers'>
+        /// Optional. The delegating handlers to add to the http client pipeline.
+        /// </param>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        public Serialized(System.Uri baseUri, ServiceClientCredentials credentials, HttpClientHandler rootHandler, params DelegatingHandler[] handlers) : this(rootHandler, handlers)
+        {
+            if (baseUri == null)
+            {
+                throw new System.ArgumentNullException("baseUri");
+            }
+            if (credentials == null)
+            {
+                throw new System.ArgumentNullException("credentials");
+            }
+            BaseUri = baseUri;
+            Credentials = credentials;
+            if (Credentials != null)
+            {
+                Credentials.InitializeServiceClient(this);
+            }
         }
 
         /// <summary>
@@ -173,6 +327,9 @@ namespace SerializedClient
         /// <param name='eventBatch'>
         /// Batch of one or more events
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -191,7 +348,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> StoreEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, EventBatch eventBatch, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> StoreEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, EventBatch eventBatch, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (aggregateType == null)
             {
@@ -219,6 +376,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("aggregateType", aggregateType);
                 tracingParameters.Add("aggregateId", aggregateId);
                 tracingParameters.Add("eventBatch", eventBatch);
@@ -236,6 +394,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("POST");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -257,6 +423,12 @@ namespace SerializedClient
                 _requestContent = SafeJsonConvert.SerializeObject(eventBatch, SerializationSettings);
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
             }
             // Send Request
             if (_shouldTrace)
@@ -315,6 +487,9 @@ namespace SerializedClient
         /// <param name='aggregateType'>
         /// The name of the aggregate type
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='deleteToken'>
         /// Valid delete token. Will be included in the response to the first DELETE
         /// request.
@@ -340,7 +515,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DeleteAggregatesByTypeOKResponse>> DeleteAggregatesByTypeWithHttpMessagesAsync(string aggregateType, System.Guid? deleteToken = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DeleteAggregatesByTypeOKResponse>> DeleteAggregatesByTypeWithHttpMessagesAsync(string aggregateType, System.Guid? serializedTenantId = default(System.Guid?), System.Guid? deleteToken = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (aggregateType == null)
             {
@@ -360,6 +535,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("aggregateType", aggregateType);
                 tracingParameters.Add("deleteToken", deleteToken);
                 tracingParameters.Add("cancellationToken", cancellationToken);
@@ -384,6 +560,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("DELETE");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -400,6 +584,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -474,6 +664,9 @@ namespace SerializedClient
         /// <param name='aggregateId'>
         /// The unique id of the aggregate
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -492,7 +685,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> AggregateExistsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> AggregateExistsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (aggregateType == null)
             {
@@ -512,6 +705,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("aggregateType", aggregateType);
                 tracingParameters.Add("aggregateId", aggregateId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
@@ -528,6 +722,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("HEAD");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -544,6 +746,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -603,6 +811,9 @@ namespace SerializedClient
         /// <param name='aggregateId'>
         /// The unique id of the aggregate
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='deleteToken'>
         /// Valid delete token. Will be included in the response to the first DELETE
         /// request.
@@ -628,7 +839,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<DeleteAggregateOKResponse>> DeleteAggregateWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, System.Guid? deleteToken = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<DeleteAggregateOKResponse>> DeleteAggregateWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), System.Guid? deleteToken = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (aggregateType == null)
             {
@@ -648,6 +859,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("aggregateType", aggregateType);
                 tracingParameters.Add("aggregateId", aggregateId);
                 tracingParameters.Add("deleteToken", deleteToken);
@@ -674,6 +886,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("DELETE");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -690,6 +910,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -768,6 +994,9 @@ namespace SerializedClient
         /// <param name='aggregateId'>
         /// The unique id of the aggregate
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='since'>
         /// Optional version number to start from
         /// </param>
@@ -795,7 +1024,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<LoadEventsOKResponse>> LoadEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, int? since = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<LoadEventsOKResponse>> LoadEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (aggregateType == null)
             {
@@ -815,6 +1044,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("aggregateType", aggregateType);
                 tracingParameters.Add("aggregateId", aggregateId);
                 tracingParameters.Add("since", since);
@@ -846,6 +1076,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -862,6 +1100,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -934,6 +1178,9 @@ namespace SerializedClient
         /// Overview showing number of batches, aggregates and events per aggregate
         /// type.
         /// </remarks>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -949,7 +1196,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ListFeedsOKResponse>> ListFeedsWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ListFeedsOKResponse>> ListFeedsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -958,6 +1205,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "ListFeeds", tracingParameters);
             }
@@ -970,6 +1218,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -986,6 +1242,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -1057,6 +1319,9 @@ namespace SerializedClient
         /// <remarks>
         /// Get current global sequence number at head for all feeds
         /// </remarks>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -1069,7 +1334,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationHeaderResponse<GetCurrentGlobalSequenceNumberHeaders>> GetCurrentGlobalSequenceNumberWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationHeaderResponse<GetCurrentGlobalSequenceNumberHeaders>> GetCurrentGlobalSequenceNumberWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1078,6 +1343,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetCurrentGlobalSequenceNumber", tracingParameters);
             }
@@ -1090,6 +1356,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("HEAD");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -1106,6 +1380,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -1174,6 +1454,9 @@ namespace SerializedClient
         /// is returned with the event batches in insertion order, each with a unique
         /// sequence number.
         /// </remarks>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='since'>
         /// Optional sequence number to start from
         /// </param>
@@ -1210,7 +1493,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1219,6 +1502,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("since", since);
                 tracingParameters.Add("limit", limit);
                 tracingParameters.Add("fromParameter", fromParameter);
@@ -1266,6 +1550,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -1282,6 +1574,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -1356,6 +1654,9 @@ namespace SerializedClient
         /// <param name='name'>
         /// The name of the feed
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -1374,7 +1675,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationHeaderResponse<GetCurrentSequenceNumberHeaders>> GetCurrentSequenceNumberWithHttpMessagesAsync(string name, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationHeaderResponse<GetCurrentSequenceNumberHeaders>> GetCurrentSequenceNumberWithHttpMessagesAsync(string name, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (name == null)
             {
@@ -1387,6 +1688,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("name", name);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetCurrentSequenceNumber", tracingParameters);
@@ -1401,6 +1703,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("HEAD");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -1417,6 +1727,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -1488,6 +1804,9 @@ namespace SerializedClient
         /// <param name='name'>
         /// The name of the feed (aggregate type)
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='since'>
         /// Optional sequence number to start from
         /// </param>
@@ -1530,7 +1849,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, System.Guid? serializedTenantId = default(System.Guid?), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (name == null)
             {
@@ -1543,6 +1862,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("name", name);
                 tracingParameters.Add("since", since);
                 tracingParameters.Add("limit", limit);
@@ -1592,6 +1912,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -1608,6 +1936,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -1679,6 +2013,9 @@ namespace SerializedClient
         /// <remarks>
         /// List all scheduled definitions
         /// </remarks>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='skip'>
         /// Number of entries to skip
         /// </param>
@@ -1700,7 +2037,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Reactions>> ListScheduledReactionsWithHttpMessagesAsync(int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Reactions>> ListScheduledReactionsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1709,6 +2046,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("skip", skip);
                 tracingParameters.Add("limit", limit);
                 tracingParameters.Add("cancellationToken", cancellationToken);
@@ -1736,6 +2074,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -1752,6 +2098,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -1827,6 +2179,9 @@ namespace SerializedClient
         /// <param name='reactionId'>
         /// ID of the scheduled reaction to delete.
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -1839,7 +2194,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> DeleteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> DeleteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1848,6 +2203,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("reactionId", reactionId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "DeleteScheduledReaction", tracingParameters);
@@ -1862,6 +2218,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("DELETE");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -1878,6 +2242,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -1935,6 +2305,9 @@ namespace SerializedClient
         /// <param name='reactionId'>
         /// ID of the scheduled reaction to delete.
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -1947,7 +2320,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> ExecuteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> ExecuteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1956,6 +2329,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("reactionId", reactionId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "ExecuteScheduledReaction", tracingParameters);
@@ -1970,6 +2344,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("POST");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -1986,6 +2368,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -2039,6 +2427,9 @@ namespace SerializedClient
         /// <remarks>
         /// List all reactions that have been executed already.
         /// </remarks>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='skip'>
         /// Number of entries to skip
         /// </param>
@@ -2060,7 +2451,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Reactions>> ListTriggeredReactionsWithHttpMessagesAsync(int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Reactions>> ListTriggeredReactionsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2069,6 +2460,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("skip", skip);
                 tracingParameters.Add("limit", limit);
                 tracingParameters.Add("cancellationToken", cancellationToken);
@@ -2096,6 +2488,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -2112,6 +2512,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -2186,6 +2592,9 @@ namespace SerializedClient
         /// <param name='reactionId'>
         /// ID of the reaction to re-execute.
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -2198,7 +2607,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> ReExecuteTriggeredReactionWithHttpMessagesAsync(System.Guid reactionId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> ReExecuteTriggeredReactionWithHttpMessagesAsync(System.Guid reactionId, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2207,6 +2616,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("reactionId", reactionId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "ReExecuteTriggeredReaction", tracingParameters);
@@ -2221,6 +2631,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("POST");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -2237,6 +2655,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -2363,6 +2787,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -2507,6 +2937,12 @@ namespace SerializedClient
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -2628,6 +3064,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -2752,6 +3194,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -2909,6 +3357,12 @@ namespace SerializedClient
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -2962,6 +3416,9 @@ namespace SerializedClient
         /// <remarks>
         /// Includes projection names and count
         /// </remarks>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -2977,7 +3434,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ListProjectionsOKResponse>> ListProjectionsWithHttpMessagesAsync(Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ListProjectionsOKResponse>> ListProjectionsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2986,6 +3443,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "ListProjections", tracingParameters);
             }
@@ -2998,6 +3456,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -3014,6 +3480,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -3158,6 +3630,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -3302,6 +3780,12 @@ namespace SerializedClient
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -3426,6 +3910,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -3586,6 +4076,12 @@ namespace SerializedClient
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -3707,6 +4203,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -3763,6 +4265,9 @@ namespace SerializedClient
         /// <param name='projectionName'>
         /// The projection name
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='reference'>
         /// Reference string to filter on. See JsonPath 'setref' for details.
         /// </param>
@@ -3798,7 +4303,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, System.Guid? serializedTenantId = default(System.Guid?), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -3818,6 +4323,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("projectionName", projectionName);
                 tracingParameters.Add("reference", reference);
                 tracingParameters.Add("sort", sort);
@@ -3857,6 +4363,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -3873,6 +4387,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -3948,6 +4468,9 @@ namespace SerializedClient
         /// <param name='projectionName'>
         /// The projection name
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -3966,7 +4489,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> RecreateSingleProjectionsWithHttpMessagesAsync(string projectionName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> RecreateSingleProjectionsWithHttpMessagesAsync(string projectionName, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -3986,6 +4509,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("projectionName", projectionName);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "RecreateSingleProjections", tracingParameters);
@@ -4000,6 +4524,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("DELETE");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -4016,6 +4548,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -4072,6 +4610,9 @@ namespace SerializedClient
         /// <param name='projectionId'>
         /// The projectionId
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='awaitCreation'>
         /// Max number of milliseconds to await the initial creation. Must be between 1
         /// and 60000.
@@ -4097,7 +4638,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Projection>> GetSingleProjectionWithHttpMessagesAsync(string projectionName, System.Guid projectionId, int? awaitCreation = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Projection>> GetSingleProjectionWithHttpMessagesAsync(string projectionName, System.Guid projectionId, System.Guid? serializedTenantId = default(System.Guid?), int? awaitCreation = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -4117,6 +4658,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("projectionName", projectionName);
                 tracingParameters.Add("projectionId", projectionId);
                 tracingParameters.Add("awaitCreation", awaitCreation);
@@ -4143,6 +4685,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -4159,6 +4709,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -4230,6 +4786,9 @@ namespace SerializedClient
         /// <remarks>
         /// List all aggregated projections
         /// </remarks>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='sort'>
         /// Sort string. Any combination of the following fields: projectionId,
         /// createdAt, updatedAt. Add '+' and '-' prefixes to indicate
@@ -4256,7 +4815,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Projections>> ListAggregatedProjectionsWithHttpMessagesAsync(string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Projections>> ListAggregatedProjectionsWithHttpMessagesAsync(System.Guid? serializedTenantId = default(System.Guid?), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -4265,6 +4824,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("sort", sort);
                 tracingParameters.Add("skip", skip);
                 tracingParameters.Add("limit", limit);
@@ -4297,6 +4857,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -4313,6 +4881,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -4384,6 +4958,9 @@ namespace SerializedClient
         /// <param name='projectionName'>
         /// The projection name
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -4405,7 +4982,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Projection>> GetAggregatedProjectionWithHttpMessagesAsync(string projectionName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Projection>> GetAggregatedProjectionWithHttpMessagesAsync(string projectionName, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -4425,6 +5002,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("projectionName", projectionName);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetAggregatedProjection", tracingParameters);
@@ -4439,6 +5017,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("GET");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -4455,6 +5041,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -4530,6 +5122,9 @@ namespace SerializedClient
         /// <param name='projectionName'>
         /// The projection name
         /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -4548,7 +5143,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> RecreateAggregatedProjectionsWithHttpMessagesAsync(string projectionName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> RecreateAggregatedProjectionsWithHttpMessagesAsync(string projectionName, System.Guid? serializedTenantId = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -4568,6 +5163,7 @@ namespace SerializedClient
             {
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("projectionName", projectionName);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "RecreateAggregatedProjections", tracingParameters);
@@ -4582,6 +5178,14 @@ namespace SerializedClient
             _httpRequest.Method = new HttpMethod("DELETE");
             _httpRequest.RequestUri = new System.Uri(_url);
             // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", SafeJsonConvert.SerializeObject(serializedTenantId, SerializationSettings).Trim('"'));
+            }
 
 
             if (customHeaders != null)
@@ -4598,6 +5202,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -4703,6 +5313,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -4847,6 +5463,12 @@ namespace SerializedClient
                 _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
                 _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
             }
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {
@@ -4954,6 +5576,12 @@ namespace SerializedClient
 
             // Serialize Request
             string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
             // Send Request
             if (_shouldTrace)
             {

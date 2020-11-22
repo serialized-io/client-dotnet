@@ -31,9 +31,8 @@ namespace SerializedClientTest
             {
                 Debug.WriteLine("Running scenario test... " + DateTime.Now);
 
-                var client = new Serialized();
-                client.HttpClient.DefaultRequestHeaders.Add("Serialized-Access-Key", accessKey);
-                client.HttpClient.DefaultRequestHeaders.Add("Serialized-Secret-Access-Key", secretAccessKey);
+                var credentials = new SerializedClientCredentials(accessKey, secretAccessKey);
+                var client = new Serialized(credentials);
 
                 cleanUpPreviousExecutionResult(client);
                 setUpDefinitions(client);
@@ -315,7 +314,7 @@ namespace SerializedClientTest
         {
             Debug.WriteLine("Filtering single projections by reference: " + ordersProjections);
 
-            var orders = client.ListSingleProjections(ordersProjections, reference);
+            var orders = client.ListSingleProjections(ordersProjections, reference: reference);
             Assert.AreEqual(false, orders.HasMore);
             Assert.AreEqual(1, orders.ProjectionsProperty.Count);
         }
