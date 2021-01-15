@@ -784,6 +784,26 @@ namespace SerializedClient
         Task<HttpOperationResponse> AddTenantWithHttpMessagesAsync(Tenant tenant, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Update tenant
+        /// </summary>
+        /// <remarks>
+        /// Update tenant
+        /// </remarks>
+        /// <param name='tenantId'>
+        /// The tenant id
+        /// </param>
+        /// <param name='tenant'>
+        /// Tenant
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse> UpdateTenantWithHttpMessagesAsync(string tenantId, Tenant tenant, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Delete tenant
         /// </summary>
         /// <remarks>

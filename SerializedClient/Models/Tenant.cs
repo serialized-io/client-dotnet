@@ -22,7 +22,7 @@ namespace SerializedClient.Models
         /// <summary>
         /// Initializes a new instance of the Tenant class.
         /// </summary>
-        /// <param name="tenantNumber">The ever increasing tenent
+        /// <param name="tenantNumber">The ever increasing tenant
         /// number.</param>
         /// <param name="addedAt">Tenant added timestamp</param>
         /// <param name="reference">Optional external tenant reference, e.g. a
@@ -49,7 +49,7 @@ namespace SerializedClient.Models
         public System.Guid TenantId { get; set; }
 
         /// <summary>
-        /// Gets or sets the ever increasing tenent number.
+        /// Gets or sets the ever increasing tenant number.
         /// </summary>
         [JsonProperty(PropertyName = "tenantNumber")]
         public string TenantNumber { get; set; }

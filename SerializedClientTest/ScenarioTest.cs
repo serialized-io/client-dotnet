@@ -26,7 +26,6 @@ namespace SerializedClientTest
 
 
         [TestMethod]
-        //[Ignore]
         public void TestScenario()
         {
             try

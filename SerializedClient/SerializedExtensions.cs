@@ -1648,6 +1648,49 @@ namespace SerializedClient
             }
 
             /// <summary>
+            /// Update tenant
+            /// </summary>
+            /// <remarks>
+            /// Update tenant
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='tenantId'>
+            /// The tenant id
+            /// </param>
+            /// <param name='tenant'>
+            /// Tenant
+            /// </param>
+            public static void UpdateTenant(this ISerialized operations, string tenantId, Tenant tenant)
+            {
+                operations.UpdateTenantAsync(tenantId, tenant).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Update tenant
+            /// </summary>
+            /// <remarks>
+            /// Update tenant
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='tenantId'>
+            /// The tenant id
+            /// </param>
+            /// <param name='tenant'>
+            /// Tenant
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task UpdateTenantAsync(this ISerialized operations, string tenantId, Tenant tenant, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.UpdateTenantWithHttpMessagesAsync(tenantId, tenant, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <summary>
             /// Delete tenant
             /// </summary>
             /// <remarks>
