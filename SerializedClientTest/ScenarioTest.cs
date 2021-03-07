@@ -292,6 +292,11 @@ namespace SerializedClientTest
         {
             Debug.WriteLine("Getting single projections: " + ordersProjections);
 
+            // Verify count
+            var orderCount = client.GetSingleProjectionCount(ordersProjections);
+            Assert.AreEqual(1, orderCount);
+
+            // Verify list
             var orders = client.ListSingleProjections(ordersProjections);
             Assert.AreEqual(false, orders.HasMore);
             Assert.AreEqual(2, orders.ProjectionsProperty.Count);

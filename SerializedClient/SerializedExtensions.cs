@@ -1376,6 +1376,46 @@ namespace SerializedClient
             }
 
             /// <summary>
+            /// Get single projection count
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='projectionName'>
+            /// The projection name
+            /// </param>
+            /// <param name='serializedTenantId'>
+            /// The id of the tenant.
+            /// </param>
+            public static ProjectionCount GetSingleProjectionCount(this ISerialized operations, string projectionName, string serializedTenantId = default(string))
+            {
+                return operations.GetSingleProjectionCountAsync(projectionName, serializedTenantId).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Get single projection count
+            /// </summary>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='projectionName'>
+            /// The projection name
+            /// </param>
+            /// <param name='serializedTenantId'>
+            /// The id of the tenant.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<ProjectionCount> GetSingleProjectionCountAsync(this ISerialized operations, string projectionName, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetSingleProjectionCountWithHttpMessagesAsync(projectionName, serializedTenantId, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
             /// Get single projection
             /// </summary>
             /// <param name='operations'>

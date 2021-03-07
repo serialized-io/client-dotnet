@@ -662,6 +662,23 @@ namespace SerializedClient
         Task<HttpOperationResponse> RecreateSingleProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Get single projection count
+        /// </summary>
+        /// <param name='projectionName'>
+        /// The projection name
+        /// </param>
+        /// <param name='serializedTenantId'>
+        /// The id of the tenant.
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<ProjectionCount>> GetSingleProjectionCountWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Get single projection
         /// </summary>
         /// <param name='projectionName'>
