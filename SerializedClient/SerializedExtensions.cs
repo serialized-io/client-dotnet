@@ -1387,9 +1387,12 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
-            public static ProjectionCount GetSingleProjectionCount(this ISerialized operations, string projectionName, string serializedTenantId = default(string))
+            /// <param name='reference'>
+            /// Optional reference string to filter on.
+            /// </param>
+            public static ProjectionCount GetSingleProjectionCount(this ISerialized operations, string projectionName, string serializedTenantId = default(string), string reference = default(string))
             {
-                return operations.GetSingleProjectionCountAsync(projectionName, serializedTenantId).GetAwaiter().GetResult();
+                return operations.GetSingleProjectionCountAsync(projectionName, serializedTenantId, reference).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1404,12 +1407,15 @@ namespace SerializedClient
             /// <param name='serializedTenantId'>
             /// The id of the tenant.
             /// </param>
+            /// <param name='reference'>
+            /// Optional reference string to filter on.
+            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProjectionCount> GetSingleProjectionCountAsync(this ISerialized operations, string projectionName, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProjectionCount> GetSingleProjectionCountAsync(this ISerialized operations, string projectionName, string serializedTenantId = default(string), string reference = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.GetSingleProjectionCountWithHttpMessagesAsync(projectionName, serializedTenantId, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.GetSingleProjectionCountWithHttpMessagesAsync(projectionName, serializedTenantId, reference, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

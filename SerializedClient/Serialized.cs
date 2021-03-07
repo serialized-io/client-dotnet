@@ -4610,6 +4610,9 @@ namespace SerializedClient
         /// <param name='serializedTenantId'>
         /// The id of the tenant.
         /// </param>
+        /// <param name='reference'>
+        /// Optional reference string to filter on.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -4631,7 +4634,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProjectionCount>> GetSingleProjectionCountWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProjectionCount>> GetSingleProjectionCountWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), string reference = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -4653,6 +4656,7 @@ namespace SerializedClient
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("projectionName", projectionName);
+                tracingParameters.Add("reference", reference);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "GetSingleProjectionCount", tracingParameters);
             }
@@ -4660,6 +4664,15 @@ namespace SerializedClient
             var _baseUrl = BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "projections/single/{projectionName}/_count").ToString();
             _url = _url.Replace("{projectionName}", System.Uri.EscapeDataString(projectionName));
+            List<string> _queryParameters = new List<string>();
+            if (reference != null)
+            {
+                _queryParameters.Add(string.Format("reference={0}", System.Uri.EscapeDataString(reference)));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
