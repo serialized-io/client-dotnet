@@ -35,5 +35,3 @@ client.HttpClient.DefaultRequestHeaders.Add("Serialized-Secret-Access-Key", <you
 
 For a simple usage example, please see the [ScenarioTest](https://github.com/serialized-io/client-dotnet/blob/main/SerializedClientTest/ScenarioTest.cs).
 
-
-
