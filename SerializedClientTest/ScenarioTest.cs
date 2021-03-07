@@ -294,7 +294,7 @@ namespace SerializedClientTest
 
             // Verify count
             var orderCount = client.GetSingleProjectionCount(ordersProjections);
-            Assert.AreEqual(1, orderCount);
+            Assert.AreEqual(1, orderCount.Count);
 
             // Verify list
             var orders = client.ListSingleProjections(ordersProjections);
