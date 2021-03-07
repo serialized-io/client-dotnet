@@ -5,7 +5,7 @@ The official .NET client for [Serialized](https://serialized.io).
 [![](https://tokei.rs/b1/github/serialized-io/client-dotnet)](https://github.com/serialized-io/client-dotnet)
 [![Actions Status](https://github.com/serialized-io/client-dotnet/workflows/Build%20&%20Test/badge.svg)](https://github.com/serialized-io/client-dotnet/actions)
 
-The client classes are generated using [AutoRest 3.0.6247](https://github.com/Azure/autorest) and our [Swagger JSON](https://serialized.io/api.json) file.
+The client classes are generated using [AutoRest 3.1.2](https://github.com/Azure/autorest) and our [Swagger JSON](https://serialized.io/api.json) file.
 
 ## 💡 Getting Started
 
