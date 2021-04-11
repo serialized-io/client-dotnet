@@ -7,6 +7,8 @@
 namespace SerializedClient
 {
     using Models;
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Threading;
     using System.Threading.Tasks;
 
@@ -414,9 +416,17 @@ namespace SerializedClient
             /// <param name='partitionNumber'>
             /// The partition number to request.
             /// </param>
-            public static Feed FeedEvents(this ISerialized operations, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?))
+            /// <param name='waitTime'>
+            /// If provided, will generate a long-polling request. This is the maximum time
+            /// (in ms) to wait before responding. Maximum value is 60000.
+            /// </param>
+            /// <param name='filterType'>
+            /// If provided, filters the feed on the given event types. Provide multiple
+            /// values to filter on more than one event type.
+            /// </param>
+            public static Feed FeedEvents(this ISerialized operations, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>))
             {
-                return operations.FeedEventsAsync(serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber).GetAwaiter().GetResult();
+                return operations.FeedEventsAsync(serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, waitTime, filterType).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -454,12 +464,20 @@ namespace SerializedClient
             /// <param name='partitionNumber'>
             /// The partition number to request.
             /// </param>
+            /// <param name='waitTime'>
+            /// If provided, will generate a long-polling request. This is the maximum time
+            /// (in ms) to wait before responding. Maximum value is 60000.
+            /// </param>
+            /// <param name='filterType'>
+            /// If provided, filters the feed on the given event types. Provide multiple
+            /// values to filter on more than one event type.
+            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Feed> FeedEventsAsync(this ISerialized operations, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Feed> FeedEventsAsync(this ISerialized operations, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.FeedEventsWithHttpMessagesAsync(serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.FeedEventsWithHttpMessagesAsync(serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, waitTime, filterType, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -549,9 +567,17 @@ namespace SerializedClient
             /// <param name='partitionNumber'>
             /// The partition number to request.
             /// </param>
-            public static Feed FeedEventsByType(this ISerialized operations, string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?))
+            /// <param name='waitTime'>
+            /// If provided, will generate a long-polling request. This is the maximum time
+            /// (in ms) to wait before responding. Maximum value is 60000.
+            /// </param>
+            /// <param name='filterType'>
+            /// If provided, filters the feed on the given event types. Provide multiple
+            /// values to filter on more than one event type.
+            /// </param>
+            public static Feed FeedEventsByType(this ISerialized operations, string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>))
             {
-                return operations.FeedEventsByTypeAsync(name, serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber).GetAwaiter().GetResult();
+                return operations.FeedEventsByTypeAsync(name, serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, waitTime, filterType).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -592,12 +618,20 @@ namespace SerializedClient
             /// <param name='partitionNumber'>
             /// The partition number to request.
             /// </param>
+            /// <param name='waitTime'>
+            /// If provided, will generate a long-polling request. This is the maximum time
+            /// (in ms) to wait before responding. Maximum value is 60000.
+            /// </param>
+            /// <param name='filterType'>
+            /// If provided, filters the feed on the given event types. Provide multiple
+            /// values to filter on more than one event type.
+            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Feed> FeedEventsByTypeAsync(this ISerialized operations, string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Feed> FeedEventsByTypeAsync(this ISerialized operations, string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.FeedEventsByTypeWithHttpMessagesAsync(name, serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.FeedEventsByTypeWithHttpMessagesAsync(name, serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, waitTime, filterType, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -1285,9 +1319,14 @@ namespace SerializedClient
             /// <param name='limit'>
             /// Max number of entries to include in response. Default is 100.
             /// </param>
-            public static Projections ListSingleProjections(this ISerialized operations, string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?))
+            /// <param name='id'>
+            /// If provided, filters on the projection id(s) to only the specified
+            /// projections. Provide multiple values to retrieve multiple projections in
+            /// the response.
+            /// </param>
+            public static Projections ListSingleProjections(this ISerialized operations, string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), IList<string> id = default(IList<string>))
             {
-                return operations.ListSingleProjectionsAsync(projectionName, serializedTenantId, reference, sort, skip, limit).GetAwaiter().GetResult();
+                return operations.ListSingleProjectionsAsync(projectionName, serializedTenantId, reference, sort, skip, limit, id).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1319,12 +1358,17 @@ namespace SerializedClient
             /// <param name='limit'>
             /// Max number of entries to include in response. Default is 100.
             /// </param>
+            /// <param name='id'>
+            /// If provided, filters on the projection id(s) to only the specified
+            /// projections. Provide multiple values to retrieve multiple projections in
+            /// the response.
+            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Projections> ListSingleProjectionsAsync(this ISerialized operations, string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Projections> ListSingleProjectionsAsync(this ISerialized operations, string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), IList<string> id = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ListSingleProjectionsWithHttpMessagesAsync(projectionName, serializedTenantId, reference, sort, skip, limit, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ListSingleProjectionsWithHttpMessagesAsync(projectionName, serializedTenantId, reference, sort, skip, limit, id, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }

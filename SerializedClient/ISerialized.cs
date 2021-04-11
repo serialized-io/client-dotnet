@@ -239,13 +239,22 @@ namespace SerializedClient
         /// <param name='partitionNumber'>
         /// The partition number to request.
         /// </param>
+        /// <param name='waitTime'>
+        /// If provided, will generate a long-polling request. This is the
+        /// maximum time (in ms) to wait before responding. Maximum value is
+        /// 60000.
+        /// </param>
+        /// <param name='filterType'>
+        /// If provided, filters the feed on the given event types. Provide
+        /// multiple values to filter on more than one event type.
+        /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get current sequence number
@@ -303,13 +312,22 @@ namespace SerializedClient
         /// <param name='partitionNumber'>
         /// The partition number to request.
         /// </param>
+        /// <param name='waitTime'>
+        /// If provided, will generate a long-polling request. This is the
+        /// maximum time (in ms) to wait before responding. Maximum value is
+        /// 60000.
+        /// </param>
+        /// <param name='filterType'>
+        /// If provided, filters the feed on the given event types. Provide
+        /// multiple values to filter on more than one event type.
+        /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// List scheduled reactions
@@ -631,13 +649,18 @@ namespace SerializedClient
         /// <param name='limit'>
         /// Max number of entries to include in response. Default is 100.
         /// </param>
+        /// <param name='id'>
+        /// If provided, filters on the projection id(s) to only the specified
+        /// projections. Provide multiple values to retrieve multiple
+        /// projections in the response.
+        /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), IList<string> id = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Delete/recreate single projections

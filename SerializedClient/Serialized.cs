@@ -1478,6 +1478,14 @@ namespace SerializedClient
         /// <param name='partitionNumber'>
         /// The partition number to request.
         /// </param>
+        /// <param name='waitTime'>
+        /// If provided, will generate a long-polling request. This is the maximum time
+        /// (in ms) to wait before responding. Maximum value is 60000.
+        /// </param>
+        /// <param name='filterType'>
+        /// If provided, filters the feed on the given event types. Provide multiple
+        /// values to filter on more than one event type.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -1493,7 +1501,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1509,6 +1517,8 @@ namespace SerializedClient
                 tracingParameters.Add("to", to);
                 tracingParameters.Add("partitionCount", partitionCount);
                 tracingParameters.Add("partitionNumber", partitionNumber);
+                tracingParameters.Add("waitTime", waitTime);
+                tracingParameters.Add("filterType", filterType);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "FeedEvents", tracingParameters);
             }
@@ -1539,6 +1549,24 @@ namespace SerializedClient
             if (partitionNumber != null)
             {
                 _queryParameters.Add(string.Format("partitionNumber={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(partitionNumber, SerializationSettings).Trim('"'))));
+            }
+            if (waitTime != null)
+            {
+                _queryParameters.Add(string.Format("waitTime={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(waitTime, SerializationSettings).Trim('"'))));
+            }
+            if (filterType != null)
+            {
+                if (filterType.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("filterType={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in filterType)
+                    {
+                        _queryParameters.Add(string.Format("filterType={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (_queryParameters.Count > 0)
             {
@@ -1828,6 +1856,14 @@ namespace SerializedClient
         /// <param name='partitionNumber'>
         /// The partition number to request.
         /// </param>
+        /// <param name='waitTime'>
+        /// If provided, will generate a long-polling request. This is the maximum time
+        /// (in ms) to wait before responding. Maximum value is 60000.
+        /// </param>
+        /// <param name='filterType'>
+        /// If provided, filters the feed on the given event types. Provide multiple
+        /// values to filter on more than one event type.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -1849,7 +1885,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (name == null)
             {
@@ -1870,6 +1906,8 @@ namespace SerializedClient
                 tracingParameters.Add("to", to);
                 tracingParameters.Add("partitionCount", partitionCount);
                 tracingParameters.Add("partitionNumber", partitionNumber);
+                tracingParameters.Add("waitTime", waitTime);
+                tracingParameters.Add("filterType", filterType);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "FeedEventsByType", tracingParameters);
             }
@@ -1901,6 +1939,24 @@ namespace SerializedClient
             if (partitionNumber != null)
             {
                 _queryParameters.Add(string.Format("partitionNumber={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(partitionNumber, SerializationSettings).Trim('"'))));
+            }
+            if (waitTime != null)
+            {
+                _queryParameters.Add(string.Format("waitTime={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(waitTime, SerializationSettings).Trim('"'))));
+            }
+            if (filterType != null)
+            {
+                if (filterType.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("filterType={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in filterType)
+                    {
+                        _queryParameters.Add(string.Format("filterType={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (_queryParameters.Count > 0)
             {
@@ -4282,6 +4338,11 @@ namespace SerializedClient
         /// <param name='limit'>
         /// Max number of entries to include in response. Default is 100.
         /// </param>
+        /// <param name='id'>
+        /// If provided, filters on the projection id(s) to only the specified
+        /// projections. Provide multiple values to retrieve multiple projections in
+        /// the response.
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -4303,7 +4364,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), IList<string> id = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -4329,6 +4390,7 @@ namespace SerializedClient
                 tracingParameters.Add("sort", sort);
                 tracingParameters.Add("skip", skip);
                 tracingParameters.Add("limit", limit);
+                tracingParameters.Add("id", id);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "ListSingleProjections", tracingParameters);
             }
@@ -4352,6 +4414,20 @@ namespace SerializedClient
             if (limit != null)
             {
                 _queryParameters.Add(string.Format("limit={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(limit, SerializationSettings).Trim('"'))));
+            }
+            if (id != null)
+            {
+                if (id.Count == 0)
+                {
+                    _queryParameters.Add(string.Format("id={0}", System.Uri.EscapeDataString(string.Empty)));
+                }
+                else
+                {
+                    foreach (var _item in id)
+                    {
+                        _queryParameters.Add(string.Format("id={0}", System.Uri.EscapeDataString("" + _item)));
+                    }
+                }
             }
             if (_queryParameters.Count > 0)
             {
