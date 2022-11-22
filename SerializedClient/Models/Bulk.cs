@@ -11,22 +11,22 @@ namespace SerializedClient.Models
     using System.Collections.Generic;
     using System.Linq;
 
-    public partial class ListFeedsOKResponse
+    public partial class Bulk
     {
         /// <summary>
-        /// Initializes a new instance of the ListFeedsOKResponse class.
+        /// Initializes a new instance of the Bulk class.
         /// </summary>
-        public ListFeedsOKResponse()
+        public Bulk()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ListFeedsOKResponse class.
+        /// Initializes a new instance of the Bulk class.
         /// </summary>
-        public ListFeedsOKResponse(IList<FeedInfo> feeds = default(IList<FeedInfo>))
+        public Bulk(IList<EventBatch> events = default(IList<EventBatch>))
         {
-            Feeds = feeds;
+            Events = events;
             CustomInit();
         }
 
@@ -37,8 +37,8 @@ namespace SerializedClient.Models
 
         /// <summary>
         /// </summary>
-        [JsonProperty(PropertyName = "feeds")]
-        public IList<FeedInfo> Feeds { get; set; }
+        [JsonProperty(PropertyName = "events")]
+        public IList<EventBatch> Events { get; set; }
 
     }
 }

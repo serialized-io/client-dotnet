@@ -7,26 +7,25 @@
 namespace SerializedClient.Models
 {
     using Newtonsoft.Json;
-    using System.Collections;
-    using System.Collections.Generic;
     using System.Linq;
 
-    public partial class ListFeedsOKResponse
+    public partial class GetCountByTypeOKResponse
     {
         /// <summary>
-        /// Initializes a new instance of the ListFeedsOKResponse class.
+        /// Initializes a new instance of the GetCountByTypeOKResponse class.
         /// </summary>
-        public ListFeedsOKResponse()
+        public GetCountByTypeOKResponse()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the ListFeedsOKResponse class.
+        /// Initializes a new instance of the GetCountByTypeOKResponse class.
         /// </summary>
-        public ListFeedsOKResponse(IList<FeedInfo> feeds = default(IList<FeedInfo>))
+        /// <param name="totalCount">Total count</param>
+        public GetCountByTypeOKResponse(long? totalCount = default(long?))
         {
-            Feeds = feeds;
+            TotalCount = totalCount;
             CustomInit();
         }
 
@@ -36,9 +35,10 @@ namespace SerializedClient.Models
         partial void CustomInit();
 
         /// <summary>
+        /// Gets or sets total count
         /// </summary>
-        [JsonProperty(PropertyName = "feeds")]
-        public IList<FeedInfo> Feeds { get; set; }
+        [JsonProperty(PropertyName = "totalCount")]
+        public long? TotalCount { get; set; }
 
     }
 }

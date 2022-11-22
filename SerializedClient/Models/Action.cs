@@ -12,7 +12,7 @@ namespace SerializedClient.Models
 
     /// <summary>
     /// See documentation for details on which field combinations are valid:
-    /// https://docs.serialized.io/api-reference/apis/reactions
+    /// https://serialized.io/docs/reactions/api-reference
     /// </summary>
     public partial class Action
     {

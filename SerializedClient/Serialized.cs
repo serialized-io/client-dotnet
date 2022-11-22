@@ -18,7 +18,7 @@ namespace SerializedClient
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Serialized SaaS API
+    /// Serialized API
     /// </summary>
     public partial class Serialized : ServiceClient<Serialized>, ISerialized
     {
@@ -319,7 +319,7 @@ namespace SerializedClient
         /// same aggregate id.
         /// </remarks>
         /// <param name='aggregateType'>
-        /// The name of the aggregate type.
+        /// The aggregate type.
         /// </param>
         /// <param name='aggregateId'>
         /// The unique id of the aggregate
@@ -328,7 +328,7 @@ namespace SerializedClient
         /// Batch of one or more events
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -478,6 +478,163 @@ namespace SerializedClient
         }
 
         /// <summary>
+        /// Bulk Store events
+        /// </summary>
+        /// <remarks>
+        /// Bulk stores all events in the request atomically. All events must refer to
+        /// unique aggregate ids.
+        /// </remarks>
+        /// <param name='aggregateType'>
+        /// The aggregate type.
+        /// </param>
+        /// <param name='bulk'>
+        /// Bulk of one or more batches
+        /// </param>
+        /// <param name='serializedTenantId'>
+        /// The optional ID of the tenant.
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> BulkStoreEventsWithHttpMessagesAsync(string aggregateType, Bulk bulk, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (aggregateType == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "aggregateType");
+            }
+            if (aggregateType != null)
+            {
+                if (!System.Text.RegularExpressions.Regex.IsMatch(aggregateType, "^[a-z0-9]+[a-z0-9\\-_]+[a-z0-9]+$"))
+                {
+                    throw new ValidationException(ValidationRules.Pattern, "aggregateType", "^[a-z0-9]+[a-z0-9\\-_]+[a-z0-9]+$");
+                }
+            }
+            if (bulk == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "bulk");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
+                tracingParameters.Add("aggregateType", aggregateType);
+                tracingParameters.Add("bulk", bulk);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "BulkStoreEvents", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "aggregates/{aggregateType}/events").ToString();
+            _url = _url.Replace("{aggregateType}", System.Uri.EscapeDataString(aggregateType));
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
+            }
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            if(bulk != null)
+            {
+                _requestContent = SafeJsonConvert.SerializeObject(bulk, SerializationSettings);
+                _httpRequest.Content = new StringContent(_requestContent, System.Text.Encoding.UTF8);
+                _httpRequest.Content.Headers.ContentType =System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json; charset=utf-8");
+            }
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 400 && (int)_statusCode != 409 && (int)_statusCode != 422)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
         /// Delete all aggregates by type
         /// </summary>
         /// <remarks>
@@ -485,13 +642,13 @@ namespace SerializedClient
         /// aggregate type.
         /// </remarks>
         /// <param name='aggregateType'>
-        /// The name of the aggregate type
+        /// The aggregate type
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='deleteToken'>
-        /// Valid delete token. Will be included in the response to the first DELETE
+        /// Valid delete token. Will be included in the response of the first DELETE
         /// request.
         /// </param>
         /// <param name='customHeaders'>
@@ -656,16 +813,200 @@ namespace SerializedClient
         }
 
         /// <summary>
+        /// List aggregates by type
+        /// </summary>
+        /// <remarks>
+        /// List aggregates to get the current version and last updated time.
+        /// </remarks>
+        /// <param name='aggregateType'>
+        /// The aggregate type
+        /// </param>
+        /// <param name='serializedTenantId'>
+        /// The optional ID of the tenant.
+        /// </param>
+        /// <param name='skip'>
+        /// Optional number to start from
+        /// </param>
+        /// <param name='limit'>
+        /// Optional limit. Default is 1000.
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<ListAggregatesByTypeOKResponse>> ListAggregatesByTypeWithHttpMessagesAsync(string aggregateType, string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (aggregateType == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "aggregateType");
+            }
+            if (aggregateType != null)
+            {
+                if (!System.Text.RegularExpressions.Regex.IsMatch(aggregateType, "^[a-z0-9]+[a-z0-9\\-_]+[a-z0-9]+$"))
+                {
+                    throw new ValidationException(ValidationRules.Pattern, "aggregateType", "^[a-z0-9]+[a-z0-9\\-_]+[a-z0-9]+$");
+                }
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
+                tracingParameters.Add("aggregateType", aggregateType);
+                tracingParameters.Add("skip", skip);
+                tracingParameters.Add("limit", limit);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "ListAggregatesByType", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "aggregates/{aggregateType}").ToString();
+            _url = _url.Replace("{aggregateType}", System.Uri.EscapeDataString(aggregateType));
+            List<string> _queryParameters = new List<string>();
+            if (skip != null)
+            {
+                _queryParameters.Add(string.Format("skip={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(skip, SerializationSettings).Trim('"'))));
+            }
+            if (limit != null)
+            {
+                _queryParameters.Add(string.Format("limit={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(limit, SerializationSettings).Trim('"'))));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
+            }
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<ListAggregatesByTypeOKResponse>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<ListAggregatesByTypeOKResponse>(_responseContent, DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
         /// Check if an aggregate exists
         /// </summary>
         /// <param name='aggregateType'>
-        /// The name of the aggregate type
+        /// The aggregate type
         /// </param>
         /// <param name='aggregateId'>
         /// The unique id of the aggregate
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -806,13 +1147,13 @@ namespace SerializedClient
         /// Permanently delete an aggregate, including all events.
         /// </remarks>
         /// <param name='aggregateType'>
-        /// The name of the aggregate type
+        /// The aggregate type
         /// </param>
         /// <param name='aggregateId'>
         /// The unique id of the aggregate
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='deleteToken'>
         /// Valid delete token. Will be included in the response to the first DELETE
@@ -989,19 +1330,22 @@ namespace SerializedClient
         /// state.
         /// </remarks>
         /// <param name='aggregateType'>
-        /// The name of the aggregate type
+        /// The aggregate type
         /// </param>
         /// <param name='aggregateId'>
         /// The unique id of the aggregate
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='since'>
         /// Optional version number to start from
         /// </param>
         /// <param name='limit'>
         /// Optional version limit. Default is 1000.
+        /// </param>
+        /// <param name='includeMetadata'>
+        /// Adds timestamp and aggregateVersion to the response.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1024,7 +1368,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<LoadEventsOKResponse>> LoadEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<LoadEventsOKResponse>> LoadEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), bool? includeMetadata = false, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (aggregateType == null)
             {
@@ -1049,6 +1393,7 @@ namespace SerializedClient
                 tracingParameters.Add("aggregateId", aggregateId);
                 tracingParameters.Add("since", since);
                 tracingParameters.Add("limit", limit);
+                tracingParameters.Add("includeMetadata", includeMetadata);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "LoadEvents", tracingParameters);
             }
@@ -1065,6 +1410,10 @@ namespace SerializedClient
             if (limit != null)
             {
                 _queryParameters.Add(string.Format("limit={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(limit, SerializationSettings).Trim('"'))));
+            }
+            if (includeMetadata != null)
+            {
+                _queryParameters.Add(string.Format("includeMetadata={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(includeMetadata, SerializationSettings).Trim('"'))));
             }
             if (_queryParameters.Count > 0)
             {
@@ -1179,7 +1528,7 @@ namespace SerializedClient
         /// type.
         /// </remarks>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1320,7 +1669,7 @@ namespace SerializedClient
         /// Get current global sequence number at head for all feeds
         /// </remarks>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1455,21 +1804,21 @@ namespace SerializedClient
         /// sequence number.
         /// </remarks>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='since'>
-        /// Optional sequence number to start from
+        /// Optional sequence number to start from (exclusive)
         /// </param>
         /// <param name='limit'>
         /// Optional response limit. Default is 1000.
         /// </param>
         /// <param name='fromParameter'>
-        /// Optional ISO 8601 date-time string to start from, eg. 2017-07-21T17:32:28.
-        /// Must be used in combination with 'to' parameter.
+        /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+        /// 2017-07-21T17:32:28.
         /// </param>
         /// <param name='to'>
-        /// Optional ISO 8601 date-time string to stop at, eg. 2017-07-21T17:32:28.
-        /// Must be used in combination with 'from' parameter.
+        /// Optional ISO 8601 date-time string to stop at, exclusive, eg.
+        /// 2017-07-21T17:32:28.
         /// </param>
         /// <param name='partitionCount'>
         /// The expected total number of partitions, i.e. the total number of consumers
@@ -1483,8 +1832,8 @@ namespace SerializedClient
         /// (in ms) to wait before responding. Maximum value is 60000.
         /// </param>
         /// <param name='filterType'>
-        /// If provided, filters the feed on the given event types. Provide multiple
-        /// values to filter on more than one event type.
+        /// If provided, filters the feed on the given aggregate types. Provide
+        /// multiple values to filter on more than one aggregate type.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1501,7 +1850,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(string serializedTenantId = default(string), int? since = default(int?), int? limit = 1000, System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = 1, int? partitionNumber = 0, int? waitTime = 0, IList<string> filterType = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -1674,6 +2023,170 @@ namespace SerializedClient
         }
 
         /// <summary>
+        /// Get total number of event batches
+        /// </summary>
+        /// <remarks>
+        /// Get the total number of event batches.
+        /// </remarks>
+        /// <param name='serializedTenantId'>
+        /// The optional ID of the tenant.
+        /// </param>
+        /// <param name='fromParameter'>
+        /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+        /// 2017-07-21T17:32:28.
+        /// </param>
+        /// <param name='to'>
+        /// Optional ISO 8601 date-time string to stop at, exclusive,
+        /// 2017-07-21T17:32:28.
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<GetCountOKResponse>> GetCountWithHttpMessagesAsync(string serializedTenantId = default(string), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
+                tracingParameters.Add("fromParameter", fromParameter);
+                tracingParameters.Add("to", to);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "GetCount", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "feeds/count").ToString();
+            List<string> _queryParameters = new List<string>();
+            if (fromParameter != null)
+            {
+                _queryParameters.Add(string.Format("from={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(fromParameter, SerializationSettings).Trim('"'))));
+            }
+            if (to != null)
+            {
+                _queryParameters.Add(string.Format("to={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(to, SerializationSettings).Trim('"'))));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
+            }
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<GetCountOKResponse>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<GetCountOKResponse>(_responseContent, DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
         /// Get current sequence number
         /// </summary>
         /// <remarks>
@@ -1683,7 +2196,7 @@ namespace SerializedClient
         /// The name of the feed
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1833,21 +2346,21 @@ namespace SerializedClient
         /// The name of the feed (aggregate type)
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='since'>
-        /// Optional sequence number to start from
+        /// Optional sequence number to start from, exclusive.
         /// </param>
         /// <param name='limit'>
         /// Optional response limit. Default is 1000.
         /// </param>
         /// <param name='fromParameter'>
-        /// Optional ISO 8601 date-time string to start from, eg. 2017-07-21T17:32:28.
-        /// Must be used in combination with 'to' parameter.
+        /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+        /// 2017-07-21T17:32:28.
         /// </param>
         /// <param name='to'>
-        /// Optional ISO 8601 date-time string to stop at, 2017-07-21T17:32:28. Must be
-        /// used in combination with 'from' parameter.
+        /// Optional ISO 8601 date-time string to stop at, exclusive,
+        /// 2017-07-21T17:32:28.
         /// </param>
         /// <param name='partitionCount'>
         /// The expected total number of partitions, i.e. the total number of consumers
@@ -1859,10 +2372,6 @@ namespace SerializedClient
         /// <param name='waitTime'>
         /// If provided, will generate a long-polling request. This is the maximum time
         /// (in ms) to wait before responding. Maximum value is 60000.
-        /// </param>
-        /// <param name='filterType'>
-        /// If provided, filters the feed on the given event types. Provide multiple
-        /// values to filter on more than one event type.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -1885,7 +2394,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = 1000, System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = 1, int? partitionNumber = 0, int? waitTime = 0, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (name == null)
             {
@@ -1907,7 +2416,6 @@ namespace SerializedClient
                 tracingParameters.Add("partitionCount", partitionCount);
                 tracingParameters.Add("partitionNumber", partitionNumber);
                 tracingParameters.Add("waitTime", waitTime);
-                tracingParameters.Add("filterType", filterType);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "FeedEventsByType", tracingParameters);
             }
@@ -1943,20 +2451,6 @@ namespace SerializedClient
             if (waitTime != null)
             {
                 _queryParameters.Add(string.Format("waitTime={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(waitTime, SerializationSettings).Trim('"'))));
-            }
-            if (filterType != null)
-            {
-                if (filterType.Count == 0)
-                {
-                    _queryParameters.Add(string.Format("filterType={0}", System.Uri.EscapeDataString(string.Empty)));
-                }
-                else
-                {
-                    foreach (var _item in filterType)
-                    {
-                        _queryParameters.Add(string.Format("filterType={0}", System.Uri.EscapeDataString("" + _item)));
-                    }
-                }
             }
             if (_queryParameters.Count > 0)
             {
@@ -2064,13 +2558,196 @@ namespace SerializedClient
         }
 
         /// <summary>
-        /// List scheduled reactions
+        /// Get total number of event batches
         /// </summary>
         /// <remarks>
-        /// List all scheduled definitions
+        /// Get the number of event batches for a given aggregate type (feed name).
+        /// </remarks>
+        /// <param name='name'>
+        /// The name of the feed (aggregate type)
+        /// </param>
+        /// <param name='serializedTenantId'>
+        /// The optional ID of the tenant.
+        /// </param>
+        /// <param name='fromParameter'>
+        /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+        /// 2017-07-21T17:32:28.
+        /// </param>
+        /// <param name='to'>
+        /// Optional ISO 8601 date-time string to stop at, exclusive,
+        /// 2017-07-21T17:32:28.
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="SerializationException">
+        /// Thrown when unable to deserialize the response
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse<GetCountByTypeOKResponse>> GetCountByTypeWithHttpMessagesAsync(string name, string serializedTenantId = default(string), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (name == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "name");
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("serializedTenantId", serializedTenantId);
+                tracingParameters.Add("name", name);
+                tracingParameters.Add("fromParameter", fromParameter);
+                tracingParameters.Add("to", to);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "GetCountByType", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "feeds/{name}/count").ToString();
+            _url = _url.Replace("{name}", System.Uri.EscapeDataString(name));
+            List<string> _queryParameters = new List<string>();
+            if (fromParameter != null)
+            {
+                _queryParameters.Add(string.Format("from={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(fromParameter, SerializationSettings).Trim('"'))));
+            }
+            if (to != null)
+            {
+                _queryParameters.Add(string.Format("to={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(to, SerializationSettings).Trim('"'))));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("GET");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+            if (serializedTenantId != null)
+            {
+                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
+                {
+                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
+                }
+                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
+            }
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse<GetCountByTypeOKResponse>();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            // Deserialize Response
+            if ((int)_statusCode == 200)
+            {
+                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                try
+                {
+                    _result.Body = SafeJsonConvert.DeserializeObject<GetCountByTypeOKResponse>(_responseContent, DeserializationSettings);
+                }
+                catch (JsonException ex)
+                {
+                    _httpRequest.Dispose();
+                    if (_httpResponse != null)
+                    {
+                        _httpResponse.Dispose();
+                    }
+                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
+                }
+            }
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// List reactions
+        /// </summary>
+        /// <remarks>
+        /// List reactions
         /// </remarks>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
+        /// </param>
+        /// <param name='status'>
+        /// Status to filter. Possible values are: SCHEDULED, READY, ONGOING,
+        /// COMPLETED, CANCELED, FAILED.
         /// </param>
         /// <param name='skip'>
         /// Number of entries to skip
@@ -2093,7 +2770,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Reactions>> ListScheduledReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Reactions>> ListReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), string status = "ALL", int? skip = 0, int? limit = 10, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2103,15 +2780,20 @@ namespace SerializedClient
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("serializedTenantId", serializedTenantId);
+                tracingParameters.Add("status", status);
                 tracingParameters.Add("skip", skip);
                 tracingParameters.Add("limit", limit);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "ListScheduledReactions", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "ListReactions", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "reactions/scheduled").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "reactions").ToString();
             List<string> _queryParameters = new List<string>();
+            if (status != null)
+            {
+                _queryParameters.Add(string.Format("status={0}", System.Uri.EscapeDataString(status)));
+            }
             if (skip != null)
             {
                 _queryParameters.Add(string.Format("skip={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(skip, SerializationSettings).Trim('"'))));
@@ -2236,7 +2918,7 @@ namespace SerializedClient
         /// ID of the scheduled reaction to delete.
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2266,7 +2948,7 @@ namespace SerializedClient
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "reactions/scheduled/{reactionId}").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "reactions/{reactionId}").ToString();
             _url = _url.Replace("{reactionId}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(reactionId, SerializationSettings).Trim('"')));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -2352,17 +3034,16 @@ namespace SerializedClient
         }
 
         /// <summary>
-        /// Execute a scheduled reaction
+        /// Execute a scheduled or completed reaction
         /// </summary>
         /// <remarks>
-        /// This endpoint allows you to execute a scheduled reaction without waiting
-        /// for the trigger to fire.
+        /// This endpoint allows you to execute a scheduled or completed reaction.
         /// </remarks>
         /// <param name='reactionId'>
-        /// ID of the scheduled reaction to delete.
+        /// ID of the reaction to execute.
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -2376,7 +3057,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> ExecuteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> ExecuteReactionWithHttpMessagesAsync(System.Guid reactionId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2388,298 +3069,11 @@ namespace SerializedClient
                 tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("reactionId", reactionId);
                 tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "ExecuteScheduledReaction", tracingParameters);
+                ServiceClientTracing.Enter(_invocationId, this, "ExecuteReaction", tracingParameters);
             }
             // Construct URL
             var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "reactions/scheduled/{reactionId}/execute").ToString();
-            _url = _url.Replace("{reactionId}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(reactionId, SerializationSettings).Trim('"')));
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("POST");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-            if (serializedTenantId != null)
-            {
-                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
-                {
-                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
-            }
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200 && (int)_statusCode != 404)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
-        /// List triggered reactions
-        /// </summary>
-        /// <remarks>
-        /// List all reactions that have been executed already.
-        /// </remarks>
-        /// <param name='serializedTenantId'>
-        /// The id of the tenant.
-        /// </param>
-        /// <param name='skip'>
-        /// Number of entries to skip
-        /// </param>
-        /// <param name='limit'>
-        /// Max number of entries to include in response. Default is 10.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<Reactions>> ListTriggeredReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("serializedTenantId", serializedTenantId);
-                tracingParameters.Add("skip", skip);
-                tracingParameters.Add("limit", limit);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "ListTriggeredReactions", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "reactions/triggered").ToString();
-            List<string> _queryParameters = new List<string>();
-            if (skip != null)
-            {
-                _queryParameters.Add(string.Format("skip={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(skip, SerializationSettings).Trim('"'))));
-            }
-            if (limit != null)
-            {
-                _queryParameters.Add(string.Format("limit={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(limit, SerializationSettings).Trim('"'))));
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("GET");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-            if (serializedTenantId != null)
-            {
-                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
-                {
-                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
-            }
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<Reactions>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<Reactions>(_responseContent, DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
-        /// Re-execute a triggered reaction
-        /// </summary>
-        /// <remarks>
-        /// This endpoint allows you to re-execute an already executed reaction.
-        /// </remarks>
-        /// <param name='reactionId'>
-        /// ID of the reaction to re-execute.
-        /// </param>
-        /// <param name='serializedTenantId'>
-        /// The id of the tenant.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse> ReExecuteTriggeredReactionWithHttpMessagesAsync(System.Guid reactionId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("serializedTenantId", serializedTenantId);
-                tracingParameters.Add("reactionId", reactionId);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "ReExecuteTriggeredReaction", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "reactions/triggered/{reactionId}/execute").ToString();
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "reactions/{reactionId}").ToString();
             _url = _url.Replace("{reactionId}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(reactionId, SerializationSettings).Trim('"')));
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
@@ -2791,7 +3185,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ReactionDefinitions>> ListReactionDefinitionsWithHttpMessagesAsync(int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ReactionDefinitions>> ListReactionDefinitionsWithHttpMessagesAsync(int? skip = 0, int? limit = 100, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -3473,7 +3867,7 @@ namespace SerializedClient
         /// Includes projection names and count
         /// </remarks>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -3634,7 +4028,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<ProjectionDefinitions>> ListProjectionDefinitionsWithHttpMessagesAsync(int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<ProjectionDefinitions>> ListProjectionDefinitionsWithHttpMessagesAsync(int? skip = 0, int? limit = 100, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -4322,10 +4716,20 @@ namespace SerializedClient
         /// The projection name
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='reference'>
         /// Reference string to filter on. See JsonPath 'setref' for details.
+        /// </param>
+        /// <param name='fromParameter'>
+        /// Filter reference value from. Usable if reference is a date or timestamp.
+        /// </param>
+        /// <param name='to'>
+        /// Filter reference value to. Usable if reference is a date or timestamp.
+        /// </param>
+        /// <param name='search'>
+        /// String to search for. The projection has to be created with
+        /// 'indexedFields'.
         /// </param>
         /// <param name='sort'>
         /// Sort string. Any combination of the following fields: projectionId,
@@ -4339,7 +4743,7 @@ namespace SerializedClient
         /// Max number of entries to include in response. Default is 100.
         /// </param>
         /// <param name='id'>
-        /// If provided, filters on the projection id(s) to only the specified
+        /// If provided, filters on the projection id(s) to only get the specified
         /// projections. Provide multiple values to retrieve multiple projections in
         /// the response.
         /// </param>
@@ -4364,7 +4768,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), IList<string> id = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), string reference = default(string), string fromParameter = default(string), string to = default(string), string search = default(string), string sort = default(string), int? skip = 0, int? limit = 100, IList<string> id = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -4387,6 +4791,9 @@ namespace SerializedClient
                 tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("projectionName", projectionName);
                 tracingParameters.Add("reference", reference);
+                tracingParameters.Add("fromParameter", fromParameter);
+                tracingParameters.Add("to", to);
+                tracingParameters.Add("search", search);
                 tracingParameters.Add("sort", sort);
                 tracingParameters.Add("skip", skip);
                 tracingParameters.Add("limit", limit);
@@ -4402,6 +4809,18 @@ namespace SerializedClient
             if (reference != null)
             {
                 _queryParameters.Add(string.Format("reference={0}", System.Uri.EscapeDataString(reference)));
+            }
+            if (fromParameter != null)
+            {
+                _queryParameters.Add(string.Format("from={0}", System.Uri.EscapeDataString(fromParameter)));
+            }
+            if (to != null)
+            {
+                _queryParameters.Add(string.Format("to={0}", System.Uri.EscapeDataString(to)));
+            }
+            if (search != null)
+            {
+                _queryParameters.Add(string.Format("search={0}", System.Uri.EscapeDataString(search)));
             }
             if (sort != null)
             {
@@ -4545,7 +4964,7 @@ namespace SerializedClient
         /// The projection name
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -4684,7 +5103,7 @@ namespace SerializedClient
         /// The projection name
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='reference'>
         /// Optional reference string to filter on.
@@ -4860,7 +5279,7 @@ namespace SerializedClient
         /// The projectionId
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='awaitCreation'>
         /// Max number of milliseconds to await the initial creation. Must be between 1
@@ -4887,7 +5306,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Projection>> GetSingleProjectionWithHttpMessagesAsync(string projectionName, System.Guid projectionId, string serializedTenantId = default(string), int? awaitCreation = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Projection>> GetSingleProjectionWithHttpMessagesAsync(string projectionName, System.Guid projectionId, string serializedTenantId = default(string), int? awaitCreation = 0, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (projectionName == null)
             {
@@ -5030,185 +5449,13 @@ namespace SerializedClient
         }
 
         /// <summary>
-        /// List aggregated projections
-        /// </summary>
-        /// <remarks>
-        /// List all aggregated projections
-        /// </remarks>
-        /// <param name='serializedTenantId'>
-        /// The id of the tenant.
-        /// </param>
-        /// <param name='sort'>
-        /// Sort string. Any combination of the following fields: projectionId,
-        /// createdAt, updatedAt. Add '+' and '-' prefixes to indicate
-        /// ascending/descending sort order. Ascending order is default.
-        /// </param>
-        /// <param name='skip'>
-        /// Number of entries to skip
-        /// </param>
-        /// <param name='limit'>
-        /// Max number of entries to include in response. Default is 100.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// Headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        /// <exception cref="HttpOperationException">
-        /// Thrown when the operation returned an invalid status code
-        /// </exception>
-        /// <exception cref="SerializationException">
-        /// Thrown when unable to deserialize the response
-        /// </exception>
-        /// <return>
-        /// A response object containing the response body and response headers.
-        /// </return>
-        public async Task<HttpOperationResponse<Projections>> ListAggregatedProjectionsWithHttpMessagesAsync(string serializedTenantId = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
-        {
-            // Tracing
-            bool _shouldTrace = ServiceClientTracing.IsEnabled;
-            string _invocationId = null;
-            if (_shouldTrace)
-            {
-                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
-                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
-                tracingParameters.Add("serializedTenantId", serializedTenantId);
-                tracingParameters.Add("sort", sort);
-                tracingParameters.Add("skip", skip);
-                tracingParameters.Add("limit", limit);
-                tracingParameters.Add("cancellationToken", cancellationToken);
-                ServiceClientTracing.Enter(_invocationId, this, "ListAggregatedProjections", tracingParameters);
-            }
-            // Construct URL
-            var _baseUrl = BaseUri.AbsoluteUri;
-            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "projections/aggregated").ToString();
-            List<string> _queryParameters = new List<string>();
-            if (sort != null)
-            {
-                _queryParameters.Add(string.Format("sort={0}", System.Uri.EscapeDataString(sort)));
-            }
-            if (skip != null)
-            {
-                _queryParameters.Add(string.Format("skip={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(skip, SerializationSettings).Trim('"'))));
-            }
-            if (limit != null)
-            {
-                _queryParameters.Add(string.Format("limit={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(limit, SerializationSettings).Trim('"'))));
-            }
-            if (_queryParameters.Count > 0)
-            {
-                _url += "?" + string.Join("&", _queryParameters);
-            }
-            // Create HTTP transport objects
-            var _httpRequest = new HttpRequestMessage();
-            HttpResponseMessage _httpResponse = null;
-            _httpRequest.Method = new HttpMethod("GET");
-            _httpRequest.RequestUri = new System.Uri(_url);
-            // Set Headers
-            if (serializedTenantId != null)
-            {
-                if (_httpRequest.Headers.Contains("Serialized-Tenant-Id"))
-                {
-                    _httpRequest.Headers.Remove("Serialized-Tenant-Id");
-                }
-                _httpRequest.Headers.TryAddWithoutValidation("Serialized-Tenant-Id", serializedTenantId);
-            }
-
-
-            if (customHeaders != null)
-            {
-                foreach(var _header in customHeaders)
-                {
-                    if (_httpRequest.Headers.Contains(_header.Key))
-                    {
-                        _httpRequest.Headers.Remove(_header.Key);
-                    }
-                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
-                }
-            }
-
-            // Serialize Request
-            string _requestContent = null;
-            // Set Credentials
-            if (Credentials != null)
-            {
-                cancellationToken.ThrowIfCancellationRequested();
-                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            }
-            // Send Request
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
-            }
-            cancellationToken.ThrowIfCancellationRequested();
-            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
-            }
-            HttpStatusCode _statusCode = _httpResponse.StatusCode;
-            cancellationToken.ThrowIfCancellationRequested();
-            string _responseContent = null;
-            if ((int)_statusCode != 200)
-            {
-                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
-                if (_httpResponse.Content != null) {
-                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                }
-                else {
-                    _responseContent = string.Empty;
-                }
-                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
-                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
-                if (_shouldTrace)
-                {
-                    ServiceClientTracing.Error(_invocationId, ex);
-                }
-                _httpRequest.Dispose();
-                if (_httpResponse != null)
-                {
-                    _httpResponse.Dispose();
-                }
-                throw ex;
-            }
-            // Create Result
-            var _result = new HttpOperationResponse<Projections>();
-            _result.Request = _httpRequest;
-            _result.Response = _httpResponse;
-            // Deserialize Response
-            if ((int)_statusCode == 200)
-            {
-                _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
-                try
-                {
-                    _result.Body = SafeJsonConvert.DeserializeObject<Projections>(_responseContent, DeserializationSettings);
-                }
-                catch (JsonException ex)
-                {
-                    _httpRequest.Dispose();
-                    if (_httpResponse != null)
-                    {
-                        _httpResponse.Dispose();
-                    }
-                    throw new SerializationException("Unable to deserialize the response.", _responseContent, ex);
-                }
-            }
-            if (_shouldTrace)
-            {
-                ServiceClientTracing.Exit(_invocationId, _result);
-            }
-            return _result;
-        }
-
-        /// <summary>
         /// Get aggregated projection
         /// </summary>
         /// <param name='projectionName'>
         /// The projection name
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -5372,7 +5619,7 @@ namespace SerializedClient
         /// The projection name
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
@@ -5994,6 +6241,136 @@ namespace SerializedClient
             cancellationToken.ThrowIfCancellationRequested();
             string _responseContent = null;
             if ((int)_statusCode != 200 && (int)_statusCode != 404)
+            {
+                var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
+                if (_httpResponse.Content != null) {
+                    _responseContent = await _httpResponse.Content.ReadAsStringAsync().ConfigureAwait(false);
+                }
+                else {
+                    _responseContent = string.Empty;
+                }
+                ex.Request = new HttpRequestMessageWrapper(_httpRequest, _requestContent);
+                ex.Response = new HttpResponseMessageWrapper(_httpResponse, _responseContent);
+                if (_shouldTrace)
+                {
+                    ServiceClientTracing.Error(_invocationId, ex);
+                }
+                _httpRequest.Dispose();
+                if (_httpResponse != null)
+                {
+                    _httpResponse.Dispose();
+                }
+                throw ex;
+            }
+            // Create Result
+            var _result = new HttpOperationResponse();
+            _result.Request = _httpRequest;
+            _result.Response = _httpResponse;
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.Exit(_invocationId, _result);
+            }
+            return _result;
+        }
+
+        /// <summary>
+        /// Undelete tenant
+        /// </summary>
+        /// <remarks>
+        /// Undelete tenant
+        /// </remarks>
+        /// <param name='tenantId'>
+        /// The tenant id
+        /// </param>
+        /// <param name='customHeaders'>
+        /// Headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        /// <exception cref="HttpOperationException">
+        /// Thrown when the operation returned an invalid status code
+        /// </exception>
+        /// <exception cref="ValidationException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// Thrown when a required parameter is null
+        /// </exception>
+        /// <return>
+        /// A response object containing the response body and response headers.
+        /// </return>
+        public async Task<HttpOperationResponse> UndeleteTenantWithHttpMessagesAsync(string tenantId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (tenantId == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "tenantId");
+            }
+            if (tenantId != null)
+            {
+                if (!System.Text.RegularExpressions.Regex.IsMatch(tenantId, "uuid"))
+                {
+                    throw new ValidationException(ValidationRules.Pattern, "tenantId", "uuid");
+                }
+            }
+            // Tracing
+            bool _shouldTrace = ServiceClientTracing.IsEnabled;
+            string _invocationId = null;
+            if (_shouldTrace)
+            {
+                _invocationId = ServiceClientTracing.NextInvocationId.ToString();
+                Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
+                tracingParameters.Add("tenantId", tenantId);
+                tracingParameters.Add("cancellationToken", cancellationToken);
+                ServiceClientTracing.Enter(_invocationId, this, "UndeleteTenant", tracingParameters);
+            }
+            // Construct URL
+            var _baseUrl = BaseUri.AbsoluteUri;
+            var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "tenants/{tenantId}/undelete").ToString();
+            _url = _url.Replace("{tenantId}", System.Uri.EscapeDataString(tenantId));
+            // Create HTTP transport objects
+            var _httpRequest = new HttpRequestMessage();
+            HttpResponseMessage _httpResponse = null;
+            _httpRequest.Method = new HttpMethod("POST");
+            _httpRequest.RequestUri = new System.Uri(_url);
+            // Set Headers
+
+
+            if (customHeaders != null)
+            {
+                foreach(var _header in customHeaders)
+                {
+                    if (_httpRequest.Headers.Contains(_header.Key))
+                    {
+                        _httpRequest.Headers.Remove(_header.Key);
+                    }
+                    _httpRequest.Headers.TryAddWithoutValidation(_header.Key, _header.Value);
+                }
+            }
+
+            // Serialize Request
+            string _requestContent = null;
+            // Set Credentials
+            if (Credentials != null)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                await Credentials.ProcessHttpRequestAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            }
+            // Send Request
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.SendRequest(_invocationId, _httpRequest);
+            }
+            cancellationToken.ThrowIfCancellationRequested();
+            _httpResponse = await HttpClient.SendAsync(_httpRequest, cancellationToken).ConfigureAwait(false);
+            if (_shouldTrace)
+            {
+                ServiceClientTracing.ReceiveResponse(_invocationId, _httpResponse);
+            }
+            HttpStatusCode _statusCode = _httpResponse.StatusCode;
+            cancellationToken.ThrowIfCancellationRequested();
+            string _responseContent = null;
+            if ((int)_statusCode != 200 && (int)_statusCode != 204 && (int)_statusCode != 400 && (int)_statusCode != 422)
             {
                 var ex = new HttpOperationException(string.Format("Operation returned an invalid status code '{0}'", _statusCode));
                 if (_httpResponse.Content != null) {

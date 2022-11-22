@@ -24,7 +24,7 @@ namespace SerializedClient.Models
         /// Initializes a new instance of the Reaction class.
         /// </summary>
         /// <param name="reactionName">Unique name of the action</param>
-        public Reaction(System.Guid? reactionId = default(System.Guid?), string reactionName = default(string), string aggregateType = default(string), System.Guid? aggregateId = default(System.Guid?), System.Guid? eventId = default(System.Guid?), long? createdAt = default(long?), long? triggerAt = default(long?), long? finishedAt = default(long?))
+        public Reaction(System.Guid? reactionId = default(System.Guid?), string reactionName = default(string), string aggregateType = default(string), System.Guid? aggregateId = default(System.Guid?), System.Guid? eventId = default(System.Guid?), long? createdAt = default(long?), long? triggerAt = default(long?), long? finishedAt = default(long?), string status = default(string))
         {
             ReactionId = reactionId;
             ReactionName = reactionName;
@@ -34,6 +34,7 @@ namespace SerializedClient.Models
             CreatedAt = createdAt;
             TriggerAt = triggerAt;
             FinishedAt = finishedAt;
+            Status = status;
             CustomInit();
         }
 
@@ -82,6 +83,11 @@ namespace SerializedClient.Models
         /// </summary>
         [JsonProperty(PropertyName = "finishedAt")]
         public long? FinishedAt { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "status")]
+        public string Status { get; set; }
 
         /// <summary>
         /// Validate the object.

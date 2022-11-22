@@ -15,7 +15,7 @@ namespace SerializedClient
     using System.Threading.Tasks;
 
     /// <summary>
-    /// Serialized SaaS API
+    /// Serialized API
     /// </summary>
     public partial interface ISerialized : System.IDisposable
     {
@@ -49,7 +49,7 @@ namespace SerializedClient
         /// to the same aggregate id.
         /// </remarks>
         /// <param name='aggregateType'>
-        /// The name of the aggregate type.
+        /// The aggregate type.
         /// </param>
         /// <param name='aggregateId'>
         /// The unique id of the aggregate
@@ -58,7 +58,7 @@ namespace SerializedClient
         /// Batch of one or more events
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -69,6 +69,30 @@ namespace SerializedClient
         Task<HttpOperationResponse> StoreEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, EventBatch eventBatch, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Bulk Store events
+        /// </summary>
+        /// <remarks>
+        /// Bulk stores all events in the request atomically. All events must
+        /// refer to unique aggregate ids.
+        /// </remarks>
+        /// <param name='aggregateType'>
+        /// The aggregate type.
+        /// </param>
+        /// <param name='bulk'>
+        /// Bulk of one or more batches
+        /// </param>
+        /// <param name='serializedTenantId'>
+        /// The optional ID of the tenant.
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse> BulkStoreEventsWithHttpMessagesAsync(string aggregateType, Bulk bulk, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Delete all aggregates by type
         /// </summary>
         /// <remarks>
@@ -76,13 +100,13 @@ namespace SerializedClient
         /// aggregate type.
         /// </remarks>
         /// <param name='aggregateType'>
-        /// The name of the aggregate type
+        /// The aggregate type
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='deleteToken'>
-        /// Valid delete token. Will be included in the response to the first
+        /// Valid delete token. Will be included in the response of the first
         /// DELETE request.
         /// </param>
         /// <param name='customHeaders'>
@@ -94,16 +118,42 @@ namespace SerializedClient
         Task<HttpOperationResponse<DeleteAggregatesByTypeOKResponse>> DeleteAggregatesByTypeWithHttpMessagesAsync(string aggregateType, string serializedTenantId = default(string), System.Guid? deleteToken = default(System.Guid?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// List aggregates by type
+        /// </summary>
+        /// <remarks>
+        /// List aggregates to get the current version and last updated time.
+        /// </remarks>
+        /// <param name='aggregateType'>
+        /// The aggregate type
+        /// </param>
+        /// <param name='serializedTenantId'>
+        /// The optional ID of the tenant.
+        /// </param>
+        /// <param name='skip'>
+        /// Optional number to start from
+        /// </param>
+        /// <param name='limit'>
+        /// Optional limit. Default is 1000.
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<ListAggregatesByTypeOKResponse>> ListAggregatesByTypeWithHttpMessagesAsync(string aggregateType, string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Check if an aggregate exists
         /// </summary>
         /// <param name='aggregateType'>
-        /// The name of the aggregate type
+        /// The aggregate type
         /// </param>
         /// <param name='aggregateId'>
         /// The unique id of the aggregate
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -120,13 +170,13 @@ namespace SerializedClient
         /// Permanently delete an aggregate, including all events.
         /// </remarks>
         /// <param name='aggregateType'>
-        /// The name of the aggregate type
+        /// The aggregate type
         /// </param>
         /// <param name='aggregateId'>
         /// The unique id of the aggregate
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='deleteToken'>
         /// Valid delete token. Will be included in the response to the first
@@ -148,13 +198,13 @@ namespace SerializedClient
         /// current state.
         /// </remarks>
         /// <param name='aggregateType'>
-        /// The name of the aggregate type
+        /// The aggregate type
         /// </param>
         /// <param name='aggregateId'>
         /// The unique id of the aggregate
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='since'>
         /// Optional version number to start from
@@ -162,13 +212,16 @@ namespace SerializedClient
         /// <param name='limit'>
         /// Optional version limit. Default is 1000.
         /// </param>
+        /// <param name='includeMetadata'>
+        /// Adds timestamp and aggregateVersion to the response.
+        /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<LoadEventsOKResponse>> LoadEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<LoadEventsOKResponse>> LoadEventsWithHttpMessagesAsync(string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), bool? includeMetadata = false, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get event feeds overview
@@ -178,7 +231,7 @@ namespace SerializedClient
         /// aggregate type.
         /// </remarks>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -195,7 +248,7 @@ namespace SerializedClient
         /// Get current global sequence number at head for all feeds
         /// </remarks>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -214,23 +267,21 @@ namespace SerializedClient
         /// with a unique sequence number.
         /// </remarks>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='since'>
-        /// Optional sequence number to start from
+        /// Optional sequence number to start from (exclusive)
         /// </param>
         /// <param name='limit'>
         /// Optional response limit. Default is 1000.
         /// </param>
         /// <param name='fromParameter'>
-        /// Optional ISO 8601 date-time string to start from, eg.
-        /// 2017-07-21T17:32:28. Must be used in combination with 'to'
-        /// parameter.
+        /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+        /// 2017-07-21T17:32:28.
         /// </param>
         /// <param name='to'>
-        /// Optional ISO 8601 date-time string to stop at, eg.
-        /// 2017-07-21T17:32:28. Must be used in combination with 'from'
-        /// parameter.
+        /// Optional ISO 8601 date-time string to stop at, exclusive, eg.
+        /// 2017-07-21T17:32:28.
         /// </param>
         /// <param name='partitionCount'>
         /// The expected total number of partitions, i.e. the total number of
@@ -245,8 +296,8 @@ namespace SerializedClient
         /// 60000.
         /// </param>
         /// <param name='filterType'>
-        /// If provided, filters the feed on the given event types. Provide
-        /// multiple values to filter on more than one event type.
+        /// If provided, filters the feed on the given aggregate types. Provide
+        /// multiple values to filter on more than one aggregate type.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -254,7 +305,32 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Feed>> FeedEventsWithHttpMessagesAsync(string serializedTenantId = default(string), int? since = default(int?), int? limit = 1000, System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = 1, int? partitionNumber = 0, int? waitTime = 0, IList<string> filterType = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Get total number of event batches
+        /// </summary>
+        /// <remarks>
+        /// Get the total number of event batches.
+        /// </remarks>
+        /// <param name='serializedTenantId'>
+        /// The optional ID of the tenant.
+        /// </param>
+        /// <param name='fromParameter'>
+        /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+        /// 2017-07-21T17:32:28.
+        /// </param>
+        /// <param name='to'>
+        /// Optional ISO 8601 date-time string to stop at, exclusive,
+        /// 2017-07-21T17:32:28.
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<GetCountOKResponse>> GetCountWithHttpMessagesAsync(string serializedTenantId = default(string), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get current sequence number
@@ -266,7 +342,7 @@ namespace SerializedClient
         /// The name of the feed
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -288,22 +364,21 @@ namespace SerializedClient
         /// The name of the feed (aggregate type)
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='since'>
-        /// Optional sequence number to start from
+        /// Optional sequence number to start from, exclusive.
         /// </param>
         /// <param name='limit'>
         /// Optional response limit. Default is 1000.
         /// </param>
         /// <param name='fromParameter'>
-        /// Optional ISO 8601 date-time string to start from, eg.
-        /// 2017-07-21T17:32:28. Must be used in combination with 'to'
-        /// parameter.
+        /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+        /// 2017-07-21T17:32:28.
         /// </param>
         /// <param name='to'>
-        /// Optional ISO 8601 date-time string to stop at, 2017-07-21T17:32:28.
-        /// Must be used in combination with 'from' parameter.
+        /// Optional ISO 8601 date-time string to stop at, exclusive,
+        /// 2017-07-21T17:32:28.
         /// </param>
         /// <param name='partitionCount'>
         /// The expected total number of partitions, i.e. the total number of
@@ -317,9 +392,34 @@ namespace SerializedClient
         /// maximum time (in ms) to wait before responding. Maximum value is
         /// 60000.
         /// </param>
-        /// <param name='filterType'>
-        /// If provided, filters the feed on the given event types. Provide
-        /// multiple values to filter on more than one event type.
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = 1000, System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = 1, int? partitionNumber = 0, int? waitTime = 0, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Get total number of event batches
+        /// </summary>
+        /// <remarks>
+        /// Get the number of event batches for a given aggregate type (feed
+        /// name).
+        /// </remarks>
+        /// <param name='name'>
+        /// The name of the feed (aggregate type)
+        /// </param>
+        /// <param name='serializedTenantId'>
+        /// The optional ID of the tenant.
+        /// </param>
+        /// <param name='fromParameter'>
+        /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+        /// 2017-07-21T17:32:28.
+        /// </param>
+        /// <param name='to'>
+        /// Optional ISO 8601 date-time string to stop at, exclusive,
+        /// 2017-07-21T17:32:28.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -327,16 +427,20 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Feed>> FeedEventsByTypeWithHttpMessagesAsync(string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<GetCountByTypeOKResponse>> GetCountByTypeWithHttpMessagesAsync(string name, string serializedTenantId = default(string), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// List scheduled reactions
+        /// List reactions
         /// </summary>
         /// <remarks>
-        /// List all scheduled definitions
+        /// List reactions
         /// </remarks>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
+        /// </param>
+        /// <param name='status'>
+        /// Status to filter. Possible values are: SCHEDULED, READY, ONGOING,
+        /// COMPLETED, CANCELED, FAILED.
         /// </param>
         /// <param name='skip'>
         /// Number of entries to skip
@@ -350,7 +454,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Reactions>> ListScheduledReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Reactions>> ListReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), string status = "ALL", int? skip = 0, int? limit = 10, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Delete a scheduled reaction
@@ -363,7 +467,7 @@ namespace SerializedClient
         /// ID of the scheduled reaction to delete.
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -374,61 +478,17 @@ namespace SerializedClient
         Task<HttpOperationResponse> DeleteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
-        /// Execute a scheduled reaction
+        /// Execute a scheduled or completed reaction
         /// </summary>
         /// <remarks>
-        /// This endpoint allows you to execute a scheduled reaction without
-        /// waiting for the trigger to fire.
-        /// </remarks>
-        /// <param name='reactionId'>
-        /// ID of the scheduled reaction to delete.
-        /// </param>
-        /// <param name='serializedTenantId'>
-        /// The id of the tenant.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        Task<HttpOperationResponse> ExecuteScheduledReactionWithHttpMessagesAsync(System.Guid reactionId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// List triggered reactions
-        /// </summary>
-        /// <remarks>
-        /// List all reactions that have been executed already.
-        /// </remarks>
-        /// <param name='serializedTenantId'>
-        /// The id of the tenant.
-        /// </param>
-        /// <param name='skip'>
-        /// Number of entries to skip
-        /// </param>
-        /// <param name='limit'>
-        /// Max number of entries to include in response. Default is 10.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        Task<HttpOperationResponse<Reactions>> ListTriggeredReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// Re-execute a triggered reaction
-        /// </summary>
-        /// <remarks>
-        /// This endpoint allows you to re-execute an already executed
+        /// This endpoint allows you to execute a scheduled or completed
         /// reaction.
         /// </remarks>
         /// <param name='reactionId'>
-        /// ID of the reaction to re-execute.
+        /// ID of the reaction to execute.
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -436,7 +496,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> ReExecuteTriggeredReactionWithHttpMessagesAsync(System.Guid reactionId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> ExecuteReactionWithHttpMessagesAsync(System.Guid reactionId, string serializedTenantId = default(string), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// List reaction definitions
@@ -456,7 +516,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ReactionDefinitions>> ListReactionDefinitionsWithHttpMessagesAsync(int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ReactionDefinitions>> ListReactionDefinitionsWithHttpMessagesAsync(int? skip = 0, int? limit = 100, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Create reaction definition
@@ -527,7 +587,7 @@ namespace SerializedClient
         /// Includes projection names and count
         /// </remarks>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -555,7 +615,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<ProjectionDefinitions>> ListProjectionDefinitionsWithHttpMessagesAsync(int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<ProjectionDefinitions>> ListProjectionDefinitionsWithHttpMessagesAsync(int? skip = 0, int? limit = 100, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Create a projection definition
@@ -632,10 +692,22 @@ namespace SerializedClient
         /// The projection name
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='reference'>
         /// Reference string to filter on. See JsonPath 'setref' for details.
+        /// </param>
+        /// <param name='fromParameter'>
+        /// Filter reference value from. Usable if reference is a date or
+        /// timestamp.
+        /// </param>
+        /// <param name='to'>
+        /// Filter reference value to. Usable if reference is a date or
+        /// timestamp.
+        /// </param>
+        /// <param name='search'>
+        /// String to search for. The projection has to be created with
+        /// 'indexedFields'.
         /// </param>
         /// <param name='sort'>
         /// Sort string. Any combination of the following fields: projectionId,
@@ -650,8 +722,8 @@ namespace SerializedClient
         /// Max number of entries to include in response. Default is 100.
         /// </param>
         /// <param name='id'>
-        /// If provided, filters on the projection id(s) to only the specified
-        /// projections. Provide multiple values to retrieve multiple
+        /// If provided, filters on the projection id(s) to only get the
+        /// specified projections. Provide multiple values to retrieve multiple
         /// projections in the response.
         /// </param>
         /// <param name='customHeaders'>
@@ -660,7 +732,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), IList<string> id = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Projections>> ListSingleProjectionsWithHttpMessagesAsync(string projectionName, string serializedTenantId = default(string), string reference = default(string), string fromParameter = default(string), string to = default(string), string search = default(string), string sort = default(string), int? skip = 0, int? limit = 100, IList<string> id = default(IList<string>), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Delete/recreate single projections
@@ -674,7 +746,7 @@ namespace SerializedClient
         /// The projection name
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -691,7 +763,7 @@ namespace SerializedClient
         /// The projection name
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='reference'>
         /// Optional reference string to filter on.
@@ -714,7 +786,7 @@ namespace SerializedClient
         /// The projectionId
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='awaitCreation'>
         /// Max number of milliseconds to await the initial creation. Must be
@@ -726,35 +798,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Projection>> GetSingleProjectionWithHttpMessagesAsync(string projectionName, System.Guid projectionId, string serializedTenantId = default(string), int? awaitCreation = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
-
-        /// <summary>
-        /// List aggregated projections
-        /// </summary>
-        /// <remarks>
-        /// List all aggregated projections
-        /// </remarks>
-        /// <param name='serializedTenantId'>
-        /// The id of the tenant.
-        /// </param>
-        /// <param name='sort'>
-        /// Sort string. Any combination of the following fields: projectionId,
-        /// createdAt, updatedAt. Add '+' and '-' prefixes to indicate
-        /// ascending/descending sort order. Ascending order is default.
-        /// </param>
-        /// <param name='skip'>
-        /// Number of entries to skip
-        /// </param>
-        /// <param name='limit'>
-        /// Max number of entries to include in response. Default is 100.
-        /// </param>
-        /// <param name='customHeaders'>
-        /// The headers that will be added to request.
-        /// </param>
-        /// <param name='cancellationToken'>
-        /// The cancellation token.
-        /// </param>
-        Task<HttpOperationResponse<Projections>> ListAggregatedProjectionsWithHttpMessagesAsync(string serializedTenantId = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Projection>> GetSingleProjectionWithHttpMessagesAsync(string projectionName, System.Guid projectionId, string serializedTenantId = default(string), int? awaitCreation = 0, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get aggregated projection
@@ -763,7 +807,7 @@ namespace SerializedClient
         /// The projection name
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -785,7 +829,7 @@ namespace SerializedClient
         /// The projection name
         /// </param>
         /// <param name='serializedTenantId'>
-        /// The id of the tenant.
+        /// The optional ID of the tenant.
         /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
@@ -862,6 +906,23 @@ namespace SerializedClient
         /// The cancellation token.
         /// </param>
         Task<HttpOperationResponse> DeleteTenantWithHttpMessagesAsync(System.Guid tenantId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Undelete tenant
+        /// </summary>
+        /// <remarks>
+        /// Undelete tenant
+        /// </remarks>
+        /// <param name='tenantId'>
+        /// The tenant id
+        /// </param>
+        /// <param name='customHeaders'>
+        /// The headers that will be added to request.
+        /// </param>
+        /// <param name='cancellationToken'>
+        /// The cancellation token.
+        /// </param>
+        Task<HttpOperationResponse> UndeleteTenantWithHttpMessagesAsync(string tenantId, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
     }
 }

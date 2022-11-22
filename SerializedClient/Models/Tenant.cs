@@ -28,13 +28,15 @@ namespace SerializedClient.Models
         /// <param name="reference">Optional external tenant reference, e.g. a
         /// customer number or similar.</param>
         /// <param name="deleted">Indicates if the tenant was deleted.</param>
-        public Tenant(System.Guid tenantId, string tenantNumber = default(string), long? addedAt = default(long?), string reference = default(string), bool? deleted = default(bool?))
+        /// <param name="deletedAt">Timestamp when tenant was deleted</param>
+        public Tenant(System.Guid tenantId, string tenantNumber = default(string), long? addedAt = default(long?), string reference = default(string), bool? deleted = default(bool?), long? deletedAt = default(long?))
         {
             TenantId = tenantId;
             TenantNumber = tenantNumber;
             AddedAt = addedAt;
             Reference = reference;
             Deleted = deleted;
+            DeletedAt = deletedAt;
             CustomInit();
         }
 
@@ -72,6 +74,12 @@ namespace SerializedClient.Models
         /// </summary>
         [JsonProperty(PropertyName = "deleted")]
         public bool? Deleted { get; set; }
+
+        /// <summary>
+        /// Gets or sets timestamp when tenant was deleted
+        /// </summary>
+        [JsonProperty(PropertyName = "deletedAt")]
+        public long? DeletedAt { get; set; }
 
         /// <summary>
         /// Validate the object.

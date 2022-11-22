@@ -23,6 +23,8 @@ namespace SerializedClient.Models
         /// <summary>
         /// Initializes a new instance of the EventModel class.
         /// </summary>
+        /// <param name="eventId">Optional eventId. Will be generated if
+        /// omitted.</param>
         /// <param name="data">Optional user defined event data map</param>
         /// <param name="encryptedData">Optional client-side encrypted payload.
         /// Max 65535 bytes.</param>
@@ -41,6 +43,7 @@ namespace SerializedClient.Models
         partial void CustomInit();
 
         /// <summary>
+        /// Gets or sets optional eventId. Will be generated if omitted.
         /// </summary>
         [JsonProperty(PropertyName = "eventId")]
         public System.Guid? EventId { get; set; }
@@ -74,6 +77,13 @@ namespace SerializedClient.Models
             if (EventType == null)
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "EventType");
+            }
+            if (EventType != null)
+            {
+                if (!System.Text.RegularExpressions.Regex.IsMatch(EventType, "^[a-zA-Z0-9]+[a-zA-Z0-9\\-_]+[a-zA-Z0-9]+$"))
+                {
+                    throw new ValidationException(ValidationRules.Pattern, "EventType", "^[a-zA-Z0-9]+[a-zA-Z0-9\\-_]+[a-zA-Z0-9]+$");
+                }
             }
         }
     }

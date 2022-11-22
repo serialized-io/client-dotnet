@@ -41,6 +41,9 @@ namespace SerializedClientTest
                 // Verify no feeds exists as no aggregates exists.
                 Assert.AreEqual(0, client.ListFeeds().Feeds.Count);
 
+                // Get number of completed reactions, for later use.
+                var completedReactionsCount = client.ListReactions(status: "COMPLETED").ReactionsProperty.Count;
+
                 // Store events and verify loading of aggregates.
                 storeAndLoadEvents(client);
 
@@ -60,11 +63,8 @@ namespace SerializedClientTest
 
                 filterOrderProjectionsByReference(client, "PAID");
 
-                // Verify no scheduled reactions exists.
-                Assert.AreEqual(0, client.ListScheduledReactions().ReactionsProperty.Count);
-
                 // Verify the two OrderPlaced events on orderId1 and orderId2 resulted in successfully triggered reactions (new order notifications).
-                Assert.AreEqual(2, client.ListTriggeredReactions().ReactionsProperty.Count);
+                Assert.AreEqual(completedReactionsCount + 2, client.ListReactions(status: "COMPLETED").ReactionsProperty.Count);
 
                 Debug.WriteLine("Scenario test completed!");
             }

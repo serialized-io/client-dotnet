@@ -22,12 +22,19 @@ namespace SerializedClient.Models
         /// <summary>
         /// Initializes a new instance of the ProjectionInfo class.
         /// </summary>
-        public ProjectionInfo(string projectionName = default(string), string feedName = default(string), bool? aggregated = default(bool?), int? projectionsCount = default(int?))
+        /// <param name="aggregated">True if the projection is aggregated,
+        /// false if single.</param>
+        /// <param name="projectionsCount">Number of projections</param>
+        /// <param name="running">True if the projector engine is actively
+        /// feeding new entries.</param>
+        public ProjectionInfo(string projectionName = default(string), string feedName = default(string), bool? aggregated = default(bool?), int? projectionsCount = default(int?), bool? running = default(bool?), FeedProgress feedProgress = default(FeedProgress))
         {
             ProjectionName = projectionName;
             FeedName = feedName;
             Aggregated = aggregated;
             ProjectionsCount = projectionsCount;
+            Running = running;
+            FeedProgress = feedProgress;
             CustomInit();
         }
 
@@ -47,14 +54,28 @@ namespace SerializedClient.Models
         public string FeedName { get; set; }
 
         /// <summary>
+        /// Gets or sets true if the projection is aggregated, false if single.
         /// </summary>
         [JsonProperty(PropertyName = "aggregated")]
         public bool? Aggregated { get; set; }
 
         /// <summary>
+        /// Gets or sets number of projections
         /// </summary>
         [JsonProperty(PropertyName = "projectionsCount")]
         public int? ProjectionsCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets true if the projector engine is actively feeding new
+        /// entries.
+        /// </summary>
+        [JsonProperty(PropertyName = "running")]
+        public bool? Running { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "feedProgress")]
+        public FeedProgress FeedProgress { get; set; }
 
     }
 }

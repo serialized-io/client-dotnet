@@ -28,6 +28,7 @@ namespace SerializedClient.Models
         /// <param name="reactionName">Unique name of the action</param>
         /// <param name="feedName">Name of the feed</param>
         /// <param name="reactOnEventType">Event type to react on</param>
+        /// <param name="description">Definition description</param>
         /// <param name="cancelOnEventTypes">Event types to cancel reaction
         /// scheduled in the future</param>
         /// <param name="triggerTimeField">Optional path to event data field
@@ -35,10 +36,11 @@ namespace SerializedClient.Models
         /// ASAP. Dot notation supported.</param>
         /// <param name="offset">Optional trigger time offset. Defined in the
         /// ISO-8601 duration format (PnDTnHnMn.nS). May be negative.</param>
-        public ReactionDefinition(string reactionName, string feedName, string reactOnEventType, Action action, IList<object> cancelOnEventTypes = default(IList<object>), string triggerTimeField = default(string), string offset = default(string))
+        public ReactionDefinition(string reactionName, string feedName, string reactOnEventType, Action action, string description = default(string), IList<object> cancelOnEventTypes = default(IList<object>), string triggerTimeField = default(string), string offset = default(string))
         {
             ReactionName = reactionName;
             FeedName = feedName;
+            Description = description;
             ReactOnEventType = reactOnEventType;
             CancelOnEventTypes = cancelOnEventTypes;
             TriggerTimeField = triggerTimeField;
@@ -63,6 +65,12 @@ namespace SerializedClient.Models
         /// </summary>
         [JsonProperty(PropertyName = "feedName")]
         public string FeedName { get; set; }
+
+        /// <summary>
+        /// Gets or sets definition description
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
 
         /// <summary>
         /// Gets or sets event type to react on

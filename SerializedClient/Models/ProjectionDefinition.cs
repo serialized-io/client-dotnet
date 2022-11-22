@@ -33,9 +33,11 @@ namespace SerializedClient.Models
         /// <param name="signingSecret">The secret key used to HMAC sign the
         /// requests. Only applicable in combination with the use of
         /// external/custom event projectors.</param>
-        /// <param name="idField">Field in the projection to use as id field in
-        /// queries. Defaults to the aggregate id.</param>
-        public ProjectionDefinition(string projectionName, string feedName, IList<Handler> handlers, bool? aggregated = default(bool?), string signingSecret = default(string), string idField = default(string))
+        /// <param name="idField">Field in the event to use as the projection
+        /// id. Defaults to the aggregate id.</param>
+        /// <param name="description">Projection definition description</param>
+        /// <param name="indexedFields">Name of fields for </param>
+        public ProjectionDefinition(string projectionName, string feedName, IList<Handler> handlers, bool? aggregated = default(bool?), string signingSecret = default(string), string idField = default(string), string description = default(string), IList<string> indexedFields = default(IList<string>))
         {
             ProjectionName = projectionName;
             FeedName = feedName;
@@ -43,6 +45,8 @@ namespace SerializedClient.Models
             SigningSecret = signingSecret;
             IdField = idField;
             Handlers = handlers;
+            Description = description;
+            IndexedFields = indexedFields;
             CustomInit();
         }
 
@@ -79,7 +83,7 @@ namespace SerializedClient.Models
         public string SigningSecret { get; set; }
 
         /// <summary>
-        /// Gets or sets field in the projection to use as id field in queries.
+        /// Gets or sets field in the event to use as the projection id.
         /// Defaults to the aggregate id.
         /// </summary>
         [JsonProperty(PropertyName = "idField")]
@@ -89,6 +93,18 @@ namespace SerializedClient.Models
         /// </summary>
         [JsonProperty(PropertyName = "handlers")]
         public IList<Handler> Handlers { get; set; }
+
+        /// <summary>
+        /// Gets or sets projection definition description
+        /// </summary>
+        [JsonProperty(PropertyName = "description")]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets name of fields for
+        /// </summary>
+        [JsonProperty(PropertyName = "indexedFields")]
+        public IList<string> IndexedFields { get; set; }
 
         /// <summary>
         /// Validate the object.

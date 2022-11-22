@@ -29,8 +29,8 @@ namespace SerializedClient.Models
         /// against</param>
         /// <param name="functionUri">URI pointing to function when using
         /// external event projector.</param>
-        /// <param name="idField">Field in the projection to use as id field in
-        /// queries. Defaults to the aggregate id.</param>
+        /// <param name="idField">Field in the event to use as the projection
+        /// id. Defaults to the aggregate id.</param>
         /// <param name="functions">The functions to apply for matching events.
         /// Will run in specified order</param>
         public Handler(string eventType, string functionUri = default(string), string idField = default(string), IList<Function> functions = default(IList<Function>))
@@ -61,7 +61,7 @@ namespace SerializedClient.Models
         public string FunctionUri { get; set; }
 
         /// <summary>
-        /// Gets or sets field in the projection to use as id field in queries.
+        /// Gets or sets field in the event to use as the projection id.
         /// Defaults to the aggregate id.
         /// </summary>
         [JsonProperty(PropertyName = "idField")]

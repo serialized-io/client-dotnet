@@ -10,25 +10,26 @@ namespace SerializedClient.Models
     using Newtonsoft.Json;
     using System.Linq;
 
-    public partial class Feeds
+    public partial class FeedInfo
     {
         /// <summary>
-        /// Initializes a new instance of the Feeds class.
+        /// Initializes a new instance of the FeedInfo class.
         /// </summary>
-        public Feeds()
+        public FeedInfo()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the Feeds class.
+        /// Initializes a new instance of the FeedInfo class.
         /// </summary>
-        public Feeds(string aggregateType = default(string), int? aggregateCount = default(int?), int? batchCount = default(int?), int? eventCount = default(int?))
+        public FeedInfo(string aggregateType = default(string), int? aggregateCount = default(int?), int? batchCount = default(int?), int? eventCount = default(int?), int? currentSequenceNumber = default(int?))
         {
             AggregateType = aggregateType;
             AggregateCount = aggregateCount;
             BatchCount = batchCount;
             EventCount = eventCount;
+            CurrentSequenceNumber = currentSequenceNumber;
             CustomInit();
         }
 
@@ -56,6 +57,11 @@ namespace SerializedClient.Models
         /// </summary>
         [JsonProperty(PropertyName = "eventCount")]
         public int? EventCount { get; set; }
+
+        /// <summary>
+        /// </summary>
+        [JsonProperty(PropertyName = "currentSequenceNumber")]
+        public int? CurrentSequenceNumber { get; set; }
 
         /// <summary>
         /// Validate the object.

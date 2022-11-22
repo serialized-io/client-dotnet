@@ -28,7 +28,7 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='aggregateType'>
-            /// The name of the aggregate type.
+            /// The aggregate type.
             /// </param>
             /// <param name='aggregateId'>
             /// The unique id of the aggregate
@@ -37,7 +37,7 @@ namespace SerializedClient
             /// Batch of one or more events
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             public static void StoreEvents(this ISerialized operations, string aggregateType, System.Guid aggregateId, EventBatch eventBatch, string serializedTenantId = default(string))
             {
@@ -55,7 +55,7 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='aggregateType'>
-            /// The name of the aggregate type.
+            /// The aggregate type.
             /// </param>
             /// <param name='aggregateId'>
             /// The unique id of the aggregate
@@ -64,7 +64,7 @@ namespace SerializedClient
             /// Batch of one or more events
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -72,6 +72,57 @@ namespace SerializedClient
             public static async Task StoreEventsAsync(this ISerialized operations, string aggregateType, System.Guid aggregateId, EventBatch eventBatch, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.StoreEventsWithHttpMessagesAsync(aggregateType, aggregateId, eventBatch, serializedTenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <summary>
+            /// Bulk Store events
+            /// </summary>
+            /// <remarks>
+            /// Bulk stores all events in the request atomically. All events must refer to
+            /// unique aggregate ids.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='aggregateType'>
+            /// The aggregate type.
+            /// </param>
+            /// <param name='bulk'>
+            /// Bulk of one or more batches
+            /// </param>
+            /// <param name='serializedTenantId'>
+            /// The optional ID of the tenant.
+            /// </param>
+            public static void BulkStoreEvents(this ISerialized operations, string aggregateType, Bulk bulk, string serializedTenantId = default(string))
+            {
+                operations.BulkStoreEventsAsync(aggregateType, bulk, serializedTenantId).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Bulk Store events
+            /// </summary>
+            /// <remarks>
+            /// Bulk stores all events in the request atomically. All events must refer to
+            /// unique aggregate ids.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='aggregateType'>
+            /// The aggregate type.
+            /// </param>
+            /// <param name='bulk'>
+            /// Bulk of one or more batches
+            /// </param>
+            /// <param name='serializedTenantId'>
+            /// The optional ID of the tenant.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task BulkStoreEventsAsync(this ISerialized operations, string aggregateType, Bulk bulk, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.BulkStoreEventsWithHttpMessagesAsync(aggregateType, bulk, serializedTenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -85,13 +136,13 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='aggregateType'>
-            /// The name of the aggregate type
+            /// The aggregate type
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='deleteToken'>
-            /// Valid delete token. Will be included in the response to the first DELETE
+            /// Valid delete token. Will be included in the response of the first DELETE
             /// request.
             /// </param>
             public static DeleteAggregatesByTypeOKResponse DeleteAggregatesByType(this ISerialized operations, string aggregateType, string serializedTenantId = default(string), System.Guid? deleteToken = default(System.Guid?))
@@ -110,13 +161,13 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='aggregateType'>
-            /// The name of the aggregate type
+            /// The aggregate type
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='deleteToken'>
-            /// Valid delete token. Will be included in the response to the first DELETE
+            /// Valid delete token. Will be included in the response of the first DELETE
             /// request.
             /// </param>
             /// <param name='cancellationToken'>
@@ -131,19 +182,77 @@ namespace SerializedClient
             }
 
             /// <summary>
+            /// List aggregates by type
+            /// </summary>
+            /// <remarks>
+            /// List aggregates to get the current version and last updated time.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='aggregateType'>
+            /// The aggregate type
+            /// </param>
+            /// <param name='serializedTenantId'>
+            /// The optional ID of the tenant.
+            /// </param>
+            /// <param name='skip'>
+            /// Optional number to start from
+            /// </param>
+            /// <param name='limit'>
+            /// Optional limit. Default is 1000.
+            /// </param>
+            public static ListAggregatesByTypeOKResponse ListAggregatesByType(this ISerialized operations, string aggregateType, string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?))
+            {
+                return operations.ListAggregatesByTypeAsync(aggregateType, serializedTenantId, skip, limit).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// List aggregates by type
+            /// </summary>
+            /// <remarks>
+            /// List aggregates to get the current version and last updated time.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='aggregateType'>
+            /// The aggregate type
+            /// </param>
+            /// <param name='serializedTenantId'>
+            /// The optional ID of the tenant.
+            /// </param>
+            /// <param name='skip'>
+            /// Optional number to start from
+            /// </param>
+            /// <param name='limit'>
+            /// Optional limit. Default is 1000.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<ListAggregatesByTypeOKResponse> ListAggregatesByTypeAsync(this ISerialized operations, string aggregateType, string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.ListAggregatesByTypeWithHttpMessagesAsync(aggregateType, serializedTenantId, skip, limit, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
             /// Check if an aggregate exists
             /// </summary>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='aggregateType'>
-            /// The name of the aggregate type
+            /// The aggregate type
             /// </param>
             /// <param name='aggregateId'>
             /// The unique id of the aggregate
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             public static void AggregateExists(this ISerialized operations, string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string))
             {
@@ -157,13 +266,13 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='aggregateType'>
-            /// The name of the aggregate type
+            /// The aggregate type
             /// </param>
             /// <param name='aggregateId'>
             /// The unique id of the aggregate
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -183,13 +292,13 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='aggregateType'>
-            /// The name of the aggregate type
+            /// The aggregate type
             /// </param>
             /// <param name='aggregateId'>
             /// The unique id of the aggregate
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='deleteToken'>
             /// Valid delete token. Will be included in the response to the first DELETE
@@ -210,13 +319,13 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='aggregateType'>
-            /// The name of the aggregate type
+            /// The aggregate type
             /// </param>
             /// <param name='aggregateId'>
             /// The unique id of the aggregate
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='deleteToken'>
             /// Valid delete token. Will be included in the response to the first DELETE
@@ -244,13 +353,13 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='aggregateType'>
-            /// The name of the aggregate type
+            /// The aggregate type
             /// </param>
             /// <param name='aggregateId'>
             /// The unique id of the aggregate
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='since'>
             /// Optional version number to start from
@@ -258,9 +367,12 @@ namespace SerializedClient
             /// <param name='limit'>
             /// Optional version limit. Default is 1000.
             /// </param>
-            public static LoadEventsOKResponse LoadEvents(this ISerialized operations, string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?))
+            /// <param name='includeMetadata'>
+            /// Adds timestamp and aggregateVersion to the response.
+            /// </param>
+            public static LoadEventsOKResponse LoadEvents(this ISerialized operations, string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), bool? includeMetadata = false)
             {
-                return operations.LoadEventsAsync(aggregateType, aggregateId, serializedTenantId, since, limit).GetAwaiter().GetResult();
+                return operations.LoadEventsAsync(aggregateType, aggregateId, serializedTenantId, since, limit, includeMetadata).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -274,13 +386,13 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='aggregateType'>
-            /// The name of the aggregate type
+            /// The aggregate type
             /// </param>
             /// <param name='aggregateId'>
             /// The unique id of the aggregate
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='since'>
             /// Optional version number to start from
@@ -288,12 +400,15 @@ namespace SerializedClient
             /// <param name='limit'>
             /// Optional version limit. Default is 1000.
             /// </param>
+            /// <param name='includeMetadata'>
+            /// Adds timestamp and aggregateVersion to the response.
+            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<LoadEventsOKResponse> LoadEventsAsync(this ISerialized operations, string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<LoadEventsOKResponse> LoadEventsAsync(this ISerialized operations, string aggregateType, System.Guid aggregateId, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), bool? includeMetadata = false, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.LoadEventsWithHttpMessagesAsync(aggregateType, aggregateId, serializedTenantId, since, limit, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.LoadEventsWithHttpMessagesAsync(aggregateType, aggregateId, serializedTenantId, since, limit, includeMetadata, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -310,7 +425,7 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             public static ListFeedsOKResponse ListFeeds(this ISerialized operations, string serializedTenantId = default(string))
             {
@@ -328,7 +443,7 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -351,7 +466,7 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             public static GetCurrentGlobalSequenceNumberHeaders GetCurrentGlobalSequenceNumber(this ISerialized operations, string serializedTenantId = default(string))
             {
@@ -368,7 +483,7 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -393,21 +508,21 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='since'>
-            /// Optional sequence number to start from
+            /// Optional sequence number to start from (exclusive)
             /// </param>
             /// <param name='limit'>
             /// Optional response limit. Default is 1000.
             /// </param>
             /// <param name='fromParameter'>
-            /// Optional ISO 8601 date-time string to start from, eg. 2017-07-21T17:32:28.
-            /// Must be used in combination with 'to' parameter.
+            /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+            /// 2017-07-21T17:32:28.
             /// </param>
             /// <param name='to'>
-            /// Optional ISO 8601 date-time string to stop at, eg. 2017-07-21T17:32:28.
-            /// Must be used in combination with 'from' parameter.
+            /// Optional ISO 8601 date-time string to stop at, exclusive, eg.
+            /// 2017-07-21T17:32:28.
             /// </param>
             /// <param name='partitionCount'>
             /// The expected total number of partitions, i.e. the total number of consumers
@@ -421,10 +536,10 @@ namespace SerializedClient
             /// (in ms) to wait before responding. Maximum value is 60000.
             /// </param>
             /// <param name='filterType'>
-            /// If provided, filters the feed on the given event types. Provide multiple
-            /// values to filter on more than one event type.
+            /// If provided, filters the feed on the given aggregate types. Provide
+            /// multiple values to filter on more than one aggregate type.
             /// </param>
-            public static Feed FeedEvents(this ISerialized operations, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>))
+            public static Feed FeedEvents(this ISerialized operations, string serializedTenantId = default(string), int? since = default(int?), int? limit = 1000, System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = 1, int? partitionNumber = 0, int? waitTime = 0, IList<string> filterType = default(IList<string>))
             {
                 return operations.FeedEventsAsync(serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, waitTime, filterType).GetAwaiter().GetResult();
             }
@@ -441,21 +556,21 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='since'>
-            /// Optional sequence number to start from
+            /// Optional sequence number to start from (exclusive)
             /// </param>
             /// <param name='limit'>
             /// Optional response limit. Default is 1000.
             /// </param>
             /// <param name='fromParameter'>
-            /// Optional ISO 8601 date-time string to start from, eg. 2017-07-21T17:32:28.
-            /// Must be used in combination with 'to' parameter.
+            /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+            /// 2017-07-21T17:32:28.
             /// </param>
             /// <param name='to'>
-            /// Optional ISO 8601 date-time string to stop at, eg. 2017-07-21T17:32:28.
-            /// Must be used in combination with 'from' parameter.
+            /// Optional ISO 8601 date-time string to stop at, exclusive, eg.
+            /// 2017-07-21T17:32:28.
             /// </param>
             /// <param name='partitionCount'>
             /// The expected total number of partitions, i.e. the total number of consumers
@@ -469,15 +584,71 @@ namespace SerializedClient
             /// (in ms) to wait before responding. Maximum value is 60000.
             /// </param>
             /// <param name='filterType'>
-            /// If provided, filters the feed on the given event types. Provide multiple
-            /// values to filter on more than one event type.
+            /// If provided, filters the feed on the given aggregate types. Provide
+            /// multiple values to filter on more than one aggregate type.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Feed> FeedEventsAsync(this ISerialized operations, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Feed> FeedEventsAsync(this ISerialized operations, string serializedTenantId = default(string), int? since = default(int?), int? limit = 1000, System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = 1, int? partitionNumber = 0, int? waitTime = 0, IList<string> filterType = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.FeedEventsWithHttpMessagesAsync(serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, waitTime, filterType, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// Get total number of event batches
+            /// </summary>
+            /// <remarks>
+            /// Get the total number of event batches.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='serializedTenantId'>
+            /// The optional ID of the tenant.
+            /// </param>
+            /// <param name='fromParameter'>
+            /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+            /// 2017-07-21T17:32:28.
+            /// </param>
+            /// <param name='to'>
+            /// Optional ISO 8601 date-time string to stop at, exclusive,
+            /// 2017-07-21T17:32:28.
+            /// </param>
+            public static GetCountOKResponse GetCount(this ISerialized operations, string serializedTenantId = default(string), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?))
+            {
+                return operations.GetCountAsync(serializedTenantId, fromParameter, to).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Get total number of event batches
+            /// </summary>
+            /// <remarks>
+            /// Get the total number of event batches.
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='serializedTenantId'>
+            /// The optional ID of the tenant.
+            /// </param>
+            /// <param name='fromParameter'>
+            /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+            /// 2017-07-21T17:32:28.
+            /// </param>
+            /// <param name='to'>
+            /// Optional ISO 8601 date-time string to stop at, exclusive,
+            /// 2017-07-21T17:32:28.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<GetCountOKResponse> GetCountAsync(this ISerialized operations, string serializedTenantId = default(string), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetCountWithHttpMessagesAsync(serializedTenantId, fromParameter, to, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -496,7 +667,7 @@ namespace SerializedClient
             /// The name of the feed
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             public static GetCurrentSequenceNumberHeaders GetCurrentSequenceNumber(this ISerialized operations, string name, string serializedTenantId = default(string))
             {
@@ -516,7 +687,7 @@ namespace SerializedClient
             /// The name of the feed
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -544,21 +715,21 @@ namespace SerializedClient
             /// The name of the feed (aggregate type)
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='since'>
-            /// Optional sequence number to start from
+            /// Optional sequence number to start from, exclusive.
             /// </param>
             /// <param name='limit'>
             /// Optional response limit. Default is 1000.
             /// </param>
             /// <param name='fromParameter'>
-            /// Optional ISO 8601 date-time string to start from, eg. 2017-07-21T17:32:28.
-            /// Must be used in combination with 'to' parameter.
+            /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+            /// 2017-07-21T17:32:28.
             /// </param>
             /// <param name='to'>
-            /// Optional ISO 8601 date-time string to stop at, 2017-07-21T17:32:28. Must be
-            /// used in combination with 'from' parameter.
+            /// Optional ISO 8601 date-time string to stop at, exclusive,
+            /// 2017-07-21T17:32:28.
             /// </param>
             /// <param name='partitionCount'>
             /// The expected total number of partitions, i.e. the total number of consumers
@@ -571,13 +742,9 @@ namespace SerializedClient
             /// If provided, will generate a long-polling request. This is the maximum time
             /// (in ms) to wait before responding. Maximum value is 60000.
             /// </param>
-            /// <param name='filterType'>
-            /// If provided, filters the feed on the given event types. Provide multiple
-            /// values to filter on more than one event type.
-            /// </param>
-            public static Feed FeedEventsByType(this ISerialized operations, string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>))
+            public static Feed FeedEventsByType(this ISerialized operations, string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = 1000, System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = 1, int? partitionNumber = 0, int? waitTime = 0)
             {
-                return operations.FeedEventsByTypeAsync(name, serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, waitTime, filterType).GetAwaiter().GetResult();
+                return operations.FeedEventsByTypeAsync(name, serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, waitTime).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -595,21 +762,21 @@ namespace SerializedClient
             /// The name of the feed (aggregate type)
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='since'>
-            /// Optional sequence number to start from
+            /// Optional sequence number to start from, exclusive.
             /// </param>
             /// <param name='limit'>
             /// Optional response limit. Default is 1000.
             /// </param>
             /// <param name='fromParameter'>
-            /// Optional ISO 8601 date-time string to start from, eg. 2017-07-21T17:32:28.
-            /// Must be used in combination with 'to' parameter.
+            /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+            /// 2017-07-21T17:32:28.
             /// </param>
             /// <param name='to'>
-            /// Optional ISO 8601 date-time string to stop at, 2017-07-21T17:32:28. Must be
-            /// used in combination with 'from' parameter.
+            /// Optional ISO 8601 date-time string to stop at, exclusive,
+            /// 2017-07-21T17:32:28.
             /// </param>
             /// <param name='partitionCount'>
             /// The expected total number of partitions, i.e. the total number of consumers
@@ -622,32 +789,94 @@ namespace SerializedClient
             /// If provided, will generate a long-polling request. This is the maximum time
             /// (in ms) to wait before responding. Maximum value is 60000.
             /// </param>
-            /// <param name='filterType'>
-            /// If provided, filters the feed on the given event types. Provide multiple
-            /// values to filter on more than one event type.
-            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Feed> FeedEventsByTypeAsync(this ISerialized operations, string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = default(int?), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = default(int?), int? partitionNumber = default(int?), int? waitTime = default(int?), IList<string> filterType = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Feed> FeedEventsByTypeAsync(this ISerialized operations, string name, string serializedTenantId = default(string), int? since = default(int?), int? limit = 1000, System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), int? partitionCount = 1, int? partitionNumber = 0, int? waitTime = 0, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.FeedEventsByTypeWithHttpMessagesAsync(name, serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, waitTime, filterType, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.FeedEventsByTypeWithHttpMessagesAsync(name, serializedTenantId, since, limit, fromParameter, to, partitionCount, partitionNumber, waitTime, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
             }
 
             /// <summary>
-            /// List scheduled reactions
+            /// Get total number of event batches
             /// </summary>
             /// <remarks>
-            /// List all scheduled definitions
+            /// Get the number of event batches for a given aggregate type (feed name).
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='name'>
+            /// The name of the feed (aggregate type)
+            /// </param>
+            /// <param name='serializedTenantId'>
+            /// The optional ID of the tenant.
+            /// </param>
+            /// <param name='fromParameter'>
+            /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+            /// 2017-07-21T17:32:28.
+            /// </param>
+            /// <param name='to'>
+            /// Optional ISO 8601 date-time string to stop at, exclusive,
+            /// 2017-07-21T17:32:28.
+            /// </param>
+            public static GetCountByTypeOKResponse GetCountByType(this ISerialized operations, string name, string serializedTenantId = default(string), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?))
+            {
+                return operations.GetCountByTypeAsync(name, serializedTenantId, fromParameter, to).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Get total number of event batches
+            /// </summary>
+            /// <remarks>
+            /// Get the number of event batches for a given aggregate type (feed name).
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='name'>
+            /// The name of the feed (aggregate type)
+            /// </param>
+            /// <param name='serializedTenantId'>
+            /// The optional ID of the tenant.
+            /// </param>
+            /// <param name='fromParameter'>
+            /// Optional ISO 8601 date-time string to start from, inclusive, eg.
+            /// 2017-07-21T17:32:28.
+            /// </param>
+            /// <param name='to'>
+            /// Optional ISO 8601 date-time string to stop at, exclusive,
+            /// 2017-07-21T17:32:28.
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task<GetCountByTypeOKResponse> GetCountByTypeAsync(this ISerialized operations, string name, string serializedTenantId = default(string), System.DateTime? fromParameter = default(System.DateTime?), System.DateTime? to = default(System.DateTime?), CancellationToken cancellationToken = default(CancellationToken))
+            {
+                using (var _result = await operations.GetCountByTypeWithHttpMessagesAsync(name, serializedTenantId, fromParameter, to, null, cancellationToken).ConfigureAwait(false))
+                {
+                    return _result.Body;
+                }
+            }
+
+            /// <summary>
+            /// List reactions
+            /// </summary>
+            /// <remarks>
+            /// List reactions
             /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
+            /// </param>
+            /// <param name='status'>
+            /// Status to filter. Possible values are: SCHEDULED, READY, ONGOING,
+            /// COMPLETED, CANCELED, FAILED.
             /// </param>
             /// <param name='skip'>
             /// Number of entries to skip
@@ -655,22 +884,26 @@ namespace SerializedClient
             /// <param name='limit'>
             /// Max number of entries to include in response. Default is 10.
             /// </param>
-            public static Reactions ListScheduledReactions(this ISerialized operations, string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?))
+            public static Reactions ListReactions(this ISerialized operations, string serializedTenantId = default(string), string status = "ALL", int? skip = 0, int? limit = 10)
             {
-                return operations.ListScheduledReactionsAsync(serializedTenantId, skip, limit).GetAwaiter().GetResult();
+                return operations.ListReactionsAsync(serializedTenantId, status, skip, limit).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// List scheduled reactions
+            /// List reactions
             /// </summary>
             /// <remarks>
-            /// List all scheduled definitions
+            /// List reactions
             /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
+            /// </param>
+            /// <param name='status'>
+            /// Status to filter. Possible values are: SCHEDULED, READY, ONGOING,
+            /// COMPLETED, CANCELED, FAILED.
             /// </param>
             /// <param name='skip'>
             /// Number of entries to skip
@@ -681,9 +914,9 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Reactions> ListScheduledReactionsAsync(this ISerialized operations, string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Reactions> ListReactionsAsync(this ISerialized operations, string serializedTenantId = default(string), string status = "ALL", int? skip = 0, int? limit = 10, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ListScheduledReactionsWithHttpMessagesAsync(serializedTenantId, skip, limit, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ListReactionsWithHttpMessagesAsync(serializedTenantId, status, skip, limit, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -703,7 +936,7 @@ namespace SerializedClient
             /// ID of the scheduled reaction to delete.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             public static void DeleteScheduledReaction(this ISerialized operations, System.Guid reactionId, string serializedTenantId = default(string))
             {
@@ -724,7 +957,7 @@ namespace SerializedClient
             /// ID of the scheduled reaction to delete.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -735,143 +968,46 @@ namespace SerializedClient
             }
 
             /// <summary>
-            /// Execute a scheduled reaction
+            /// Execute a scheduled or completed reaction
             /// </summary>
             /// <remarks>
-            /// This endpoint allows you to execute a scheduled reaction without waiting
-            /// for the trigger to fire.
+            /// This endpoint allows you to execute a scheduled or completed reaction.
             /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='reactionId'>
-            /// ID of the scheduled reaction to delete.
+            /// ID of the reaction to execute.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
-            public static void ExecuteScheduledReaction(this ISerialized operations, System.Guid reactionId, string serializedTenantId = default(string))
+            public static void ExecuteReaction(this ISerialized operations, System.Guid reactionId, string serializedTenantId = default(string))
             {
-                operations.ExecuteScheduledReactionAsync(reactionId, serializedTenantId).GetAwaiter().GetResult();
+                operations.ExecuteReactionAsync(reactionId, serializedTenantId).GetAwaiter().GetResult();
             }
 
             /// <summary>
-            /// Execute a scheduled reaction
+            /// Execute a scheduled or completed reaction
             /// </summary>
             /// <remarks>
-            /// This endpoint allows you to execute a scheduled reaction without waiting
-            /// for the trigger to fire.
+            /// This endpoint allows you to execute a scheduled or completed reaction.
             /// </remarks>
             /// <param name='operations'>
             /// The operations group for this extension method.
             /// </param>
             /// <param name='reactionId'>
-            /// ID of the scheduled reaction to delete.
+            /// ID of the reaction to execute.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task ExecuteScheduledReactionAsync(this ISerialized operations, System.Guid reactionId, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task ExecuteReactionAsync(this ISerialized operations, System.Guid reactionId, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.ExecuteScheduledReactionWithHttpMessagesAsync(reactionId, serializedTenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
-            }
-
-            /// <summary>
-            /// List triggered reactions
-            /// </summary>
-            /// <remarks>
-            /// List all reactions that have been executed already.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='serializedTenantId'>
-            /// The id of the tenant.
-            /// </param>
-            /// <param name='skip'>
-            /// Number of entries to skip
-            /// </param>
-            /// <param name='limit'>
-            /// Max number of entries to include in response. Default is 10.
-            /// </param>
-            public static Reactions ListTriggeredReactions(this ISerialized operations, string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?))
-            {
-                return operations.ListTriggeredReactionsAsync(serializedTenantId, skip, limit).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// List triggered reactions
-            /// </summary>
-            /// <remarks>
-            /// List all reactions that have been executed already.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='serializedTenantId'>
-            /// The id of the tenant.
-            /// </param>
-            /// <param name='skip'>
-            /// Number of entries to skip
-            /// </param>
-            /// <param name='limit'>
-            /// Max number of entries to include in response. Default is 10.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Reactions> ListTriggeredReactionsAsync(this ISerialized operations, string serializedTenantId = default(string), int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.ListTriggeredReactionsWithHttpMessagesAsync(serializedTenantId, skip, limit, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
-            /// Re-execute a triggered reaction
-            /// </summary>
-            /// <remarks>
-            /// This endpoint allows you to re-execute an already executed reaction.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='reactionId'>
-            /// ID of the reaction to re-execute.
-            /// </param>
-            /// <param name='serializedTenantId'>
-            /// The id of the tenant.
-            /// </param>
-            public static void ReExecuteTriggeredReaction(this ISerialized operations, System.Guid reactionId, string serializedTenantId = default(string))
-            {
-                operations.ReExecuteTriggeredReactionAsync(reactionId, serializedTenantId).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// Re-execute a triggered reaction
-            /// </summary>
-            /// <remarks>
-            /// This endpoint allows you to re-execute an already executed reaction.
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='reactionId'>
-            /// ID of the reaction to re-execute.
-            /// </param>
-            /// <param name='serializedTenantId'>
-            /// The id of the tenant.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task ReExecuteTriggeredReactionAsync(this ISerialized operations, System.Guid reactionId, string serializedTenantId = default(string), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                (await operations.ReExecuteTriggeredReactionWithHttpMessagesAsync(reactionId, serializedTenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.ExecuteReactionWithHttpMessagesAsync(reactionId, serializedTenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -889,7 +1025,7 @@ namespace SerializedClient
             /// <param name='limit'>
             /// Max number of entries to include in response. Default is 100.
             /// </param>
-            public static ReactionDefinitions ListReactionDefinitions(this ISerialized operations, int? skip = default(int?), int? limit = default(int?))
+            public static ReactionDefinitions ListReactionDefinitions(this ISerialized operations, int? skip = 0, int? limit = 100)
             {
                 return operations.ListReactionDefinitionsAsync(skip, limit).GetAwaiter().GetResult();
             }
@@ -912,7 +1048,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ReactionDefinitions> ListReactionDefinitionsAsync(this ISerialized operations, int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ReactionDefinitions> ListReactionDefinitionsAsync(this ISerialized operations, int? skip = 0, int? limit = 100, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ListReactionDefinitionsWithHttpMessagesAsync(skip, limit, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1069,7 +1205,7 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             public static ListProjectionsOKResponse ListProjections(this ISerialized operations, string serializedTenantId = default(string))
             {
@@ -1086,7 +1222,7 @@ namespace SerializedClient
             /// The operations group for this extension method.
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -1114,7 +1250,7 @@ namespace SerializedClient
             /// <param name='limit'>
             /// Max number of entries to include in response. Default is 100.
             /// </param>
-            public static ProjectionDefinitions ListProjectionDefinitions(this ISerialized operations, int? skip = default(int?), int? limit = default(int?))
+            public static ProjectionDefinitions ListProjectionDefinitions(this ISerialized operations, int? skip = 0, int? limit = 100)
             {
                 return operations.ListProjectionDefinitionsAsync(skip, limit).GetAwaiter().GetResult();
             }
@@ -1137,7 +1273,7 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<ProjectionDefinitions> ListProjectionDefinitionsAsync(this ISerialized operations, int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<ProjectionDefinitions> ListProjectionDefinitionsAsync(this ISerialized operations, int? skip = 0, int? limit = 100, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.ListProjectionDefinitionsWithHttpMessagesAsync(skip, limit, null, cancellationToken).ConfigureAwait(false))
                 {
@@ -1303,10 +1439,20 @@ namespace SerializedClient
             /// The projection name
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='reference'>
             /// Reference string to filter on. See JsonPath 'setref' for details.
+            /// </param>
+            /// <param name='fromParameter'>
+            /// Filter reference value from. Usable if reference is a date or timestamp.
+            /// </param>
+            /// <param name='to'>
+            /// Filter reference value to. Usable if reference is a date or timestamp.
+            /// </param>
+            /// <param name='search'>
+            /// String to search for. The projection has to be created with
+            /// 'indexedFields'.
             /// </param>
             /// <param name='sort'>
             /// Sort string. Any combination of the following fields: projectionId,
@@ -1320,13 +1466,13 @@ namespace SerializedClient
             /// Max number of entries to include in response. Default is 100.
             /// </param>
             /// <param name='id'>
-            /// If provided, filters on the projection id(s) to only the specified
+            /// If provided, filters on the projection id(s) to only get the specified
             /// projections. Provide multiple values to retrieve multiple projections in
             /// the response.
             /// </param>
-            public static Projections ListSingleProjections(this ISerialized operations, string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), IList<string> id = default(IList<string>))
+            public static Projections ListSingleProjections(this ISerialized operations, string projectionName, string serializedTenantId = default(string), string reference = default(string), string fromParameter = default(string), string to = default(string), string search = default(string), string sort = default(string), int? skip = 0, int? limit = 100, IList<string> id = default(IList<string>))
             {
-                return operations.ListSingleProjectionsAsync(projectionName, serializedTenantId, reference, sort, skip, limit, id).GetAwaiter().GetResult();
+                return operations.ListSingleProjectionsAsync(projectionName, serializedTenantId, reference, fromParameter, to, search, sort, skip, limit, id).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1342,10 +1488,20 @@ namespace SerializedClient
             /// The projection name
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='reference'>
             /// Reference string to filter on. See JsonPath 'setref' for details.
+            /// </param>
+            /// <param name='fromParameter'>
+            /// Filter reference value from. Usable if reference is a date or timestamp.
+            /// </param>
+            /// <param name='to'>
+            /// Filter reference value to. Usable if reference is a date or timestamp.
+            /// </param>
+            /// <param name='search'>
+            /// String to search for. The projection has to be created with
+            /// 'indexedFields'.
             /// </param>
             /// <param name='sort'>
             /// Sort string. Any combination of the following fields: projectionId,
@@ -1359,16 +1515,16 @@ namespace SerializedClient
             /// Max number of entries to include in response. Default is 100.
             /// </param>
             /// <param name='id'>
-            /// If provided, filters on the projection id(s) to only the specified
+            /// If provided, filters on the projection id(s) to only get the specified
             /// projections. Provide multiple values to retrieve multiple projections in
             /// the response.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Projections> ListSingleProjectionsAsync(this ISerialized operations, string projectionName, string serializedTenantId = default(string), string reference = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), IList<string> id = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Projections> ListSingleProjectionsAsync(this ISerialized operations, string projectionName, string serializedTenantId = default(string), string reference = default(string), string fromParameter = default(string), string to = default(string), string search = default(string), string sort = default(string), int? skip = 0, int? limit = 100, IList<string> id = default(IList<string>), CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ListSingleProjectionsWithHttpMessagesAsync(projectionName, serializedTenantId, reference, sort, skip, limit, id, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ListSingleProjectionsWithHttpMessagesAsync(projectionName, serializedTenantId, reference, fromParameter, to, search, sort, skip, limit, id, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -1388,7 +1544,7 @@ namespace SerializedClient
             /// The projection name
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             public static void RecreateSingleProjections(this ISerialized operations, string projectionName, string serializedTenantId = default(string))
             {
@@ -1409,7 +1565,7 @@ namespace SerializedClient
             /// The projection name
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -1429,7 +1585,7 @@ namespace SerializedClient
             /// The projection name
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='reference'>
             /// Optional reference string to filter on.
@@ -1449,7 +1605,7 @@ namespace SerializedClient
             /// The projection name
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='reference'>
             /// Optional reference string to filter on.
@@ -1478,13 +1634,13 @@ namespace SerializedClient
             /// The projectionId
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='awaitCreation'>
             /// Max number of milliseconds to await the initial creation. Must be between 1
             /// and 60000.
             /// </param>
-            public static Projection GetSingleProjection(this ISerialized operations, string projectionName, System.Guid projectionId, string serializedTenantId = default(string), int? awaitCreation = default(int?))
+            public static Projection GetSingleProjection(this ISerialized operations, string projectionName, System.Guid projectionId, string serializedTenantId = default(string), int? awaitCreation = 0)
             {
                 return operations.GetSingleProjectionAsync(projectionName, projectionId, serializedTenantId, awaitCreation).GetAwaiter().GetResult();
             }
@@ -1502,7 +1658,7 @@ namespace SerializedClient
             /// The projectionId
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='awaitCreation'>
             /// Max number of milliseconds to await the initial creation. Must be between 1
@@ -1511,71 +1667,9 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Projection> GetSingleProjectionAsync(this ISerialized operations, string projectionName, System.Guid projectionId, string serializedTenantId = default(string), int? awaitCreation = default(int?), CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Projection> GetSingleProjectionAsync(this ISerialized operations, string projectionName, System.Guid projectionId, string serializedTenantId = default(string), int? awaitCreation = 0, CancellationToken cancellationToken = default(CancellationToken))
             {
                 using (var _result = await operations.GetSingleProjectionWithHttpMessagesAsync(projectionName, projectionId, serializedTenantId, awaitCreation, null, cancellationToken).ConfigureAwait(false))
-                {
-                    return _result.Body;
-                }
-            }
-
-            /// <summary>
-            /// List aggregated projections
-            /// </summary>
-            /// <remarks>
-            /// List all aggregated projections
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='serializedTenantId'>
-            /// The id of the tenant.
-            /// </param>
-            /// <param name='sort'>
-            /// Sort string. Any combination of the following fields: projectionId,
-            /// createdAt, updatedAt. Add '+' and '-' prefixes to indicate
-            /// ascending/descending sort order. Ascending order is default.
-            /// </param>
-            /// <param name='skip'>
-            /// Number of entries to skip
-            /// </param>
-            /// <param name='limit'>
-            /// Max number of entries to include in response. Default is 100.
-            /// </param>
-            public static Projections ListAggregatedProjections(this ISerialized operations, string serializedTenantId = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?))
-            {
-                return operations.ListAggregatedProjectionsAsync(serializedTenantId, sort, skip, limit).GetAwaiter().GetResult();
-            }
-
-            /// <summary>
-            /// List aggregated projections
-            /// </summary>
-            /// <remarks>
-            /// List all aggregated projections
-            /// </remarks>
-            /// <param name='operations'>
-            /// The operations group for this extension method.
-            /// </param>
-            /// <param name='serializedTenantId'>
-            /// The id of the tenant.
-            /// </param>
-            /// <param name='sort'>
-            /// Sort string. Any combination of the following fields: projectionId,
-            /// createdAt, updatedAt. Add '+' and '-' prefixes to indicate
-            /// ascending/descending sort order. Ascending order is default.
-            /// </param>
-            /// <param name='skip'>
-            /// Number of entries to skip
-            /// </param>
-            /// <param name='limit'>
-            /// Max number of entries to include in response. Default is 100.
-            /// </param>
-            /// <param name='cancellationToken'>
-            /// The cancellation token.
-            /// </param>
-            public static async Task<Projections> ListAggregatedProjectionsAsync(this ISerialized operations, string serializedTenantId = default(string), string sort = default(string), int? skip = default(int?), int? limit = default(int?), CancellationToken cancellationToken = default(CancellationToken))
-            {
-                using (var _result = await operations.ListAggregatedProjectionsWithHttpMessagesAsync(serializedTenantId, sort, skip, limit, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -1591,7 +1685,7 @@ namespace SerializedClient
             /// The projection name
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             public static Projection GetAggregatedProjection(this ISerialized operations, string projectionName, string serializedTenantId = default(string))
             {
@@ -1608,7 +1702,7 @@ namespace SerializedClient
             /// The projection name
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -1635,7 +1729,7 @@ namespace SerializedClient
             /// The projection name
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             public static void RecreateAggregatedProjections(this ISerialized operations, string projectionName, string serializedTenantId = default(string))
             {
@@ -1656,7 +1750,7 @@ namespace SerializedClient
             /// The projection name
             /// </param>
             /// <param name='serializedTenantId'>
-            /// The id of the tenant.
+            /// The optional ID of the tenant.
             /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
@@ -1815,6 +1909,43 @@ namespace SerializedClient
             public static async Task DeleteTenantAsync(this ISerialized operations, System.Guid tenantId, CancellationToken cancellationToken = default(CancellationToken))
             {
                 (await operations.DeleteTenantWithHttpMessagesAsync(tenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
+            }
+
+            /// <summary>
+            /// Undelete tenant
+            /// </summary>
+            /// <remarks>
+            /// Undelete tenant
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='tenantId'>
+            /// The tenant id
+            /// </param>
+            public static void UndeleteTenant(this ISerialized operations, string tenantId)
+            {
+                operations.UndeleteTenantAsync(tenantId).GetAwaiter().GetResult();
+            }
+
+            /// <summary>
+            /// Undelete tenant
+            /// </summary>
+            /// <remarks>
+            /// Undelete tenant
+            /// </remarks>
+            /// <param name='operations'>
+            /// The operations group for this extension method.
+            /// </param>
+            /// <param name='tenantId'>
+            /// The tenant id
+            /// </param>
+            /// <param name='cancellationToken'>
+            /// The cancellation token.
+            /// </param>
+            public static async Task UndeleteTenantAsync(this ISerialized operations, string tenantId, CancellationToken cancellationToken = default(CancellationToken))
+            {
+                (await operations.UndeleteTenantWithHttpMessagesAsync(tenantId, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
     }
