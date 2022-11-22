@@ -55,7 +55,7 @@ namespace SerializedClientTest
                 readAndVerifyOrderFeed(client);
 
                 // Projections are created async so we have to wait a while.
-                Thread.Sleep(2000);
+                Thread.Sleep(5000);
 
                 getAndVerifyOrderProjections(client);
 
