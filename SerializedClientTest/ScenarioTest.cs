@@ -55,7 +55,7 @@ namespace SerializedClientTest
                 readAndVerifyOrderFeed(client);
 
                 // Projections are created async so we have to wait a while.
-                Thread.Sleep(5000);
+                Thread.Sleep(2000);
 
                 getAndVerifyOrderProjections(client);
 
@@ -64,7 +64,9 @@ namespace SerializedClientTest
                 filterOrderProjectionsByReference(client, "PAID");
 
                 // Verify the two OrderPlaced events on orderId1 and orderId2 resulted in successfully triggered reactions (new order notifications).
-                Assert.AreEqual(completedReactionsCount + 2, client.ListReactions(status: "COMPLETED").ReactionsProperty.Count);
+                var completedReactions = client.ListReactions(status: "COMPLETED", limit: 2).ReactionsProperty;
+                Assert.AreEqual(orderId2, completedReactions[0].AggregateId);
+                Assert.AreEqual(orderId1, completedReactions[1].AggregateId);
 
                 Debug.WriteLine("Scenario test completed!");
             }
