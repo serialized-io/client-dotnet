@@ -41,9 +41,6 @@ namespace SerializedClientTest
                 // Verify no feeds exists as no aggregates exists.
                 Assert.AreEqual(0, client.ListFeeds().Feeds.Count);
 
-                // Get number of completed reactions, for later use.
-                var completedReactionsCount = client.ListReactions(status: "COMPLETED").ReactionsProperty.Count;
-
                 // Store events and verify loading of aggregates.
                 storeAndLoadEvents(client);
 
