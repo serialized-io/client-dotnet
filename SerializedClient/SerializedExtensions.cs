@@ -878,15 +878,27 @@ namespace SerializedClient
             /// Status to filter. Possible values are: SCHEDULED, READY, ONGOING,
             /// COMPLETED, CANCELED, FAILED.
             /// </param>
+            /// <param name='fromParameter'>
+            /// Filter 'triggerAt' timestamp from, inclusive.
+            /// </param>
+            /// <param name='to'>
+            /// Filter 'triggerAt' timestamp to, exclusive.
+            /// </param>
+            /// <param name='aggregateId'>
+            /// Filter by aggregate ID.
+            /// </param>
+            /// <param name='eventId'>
+            /// Filter by event ID.
+            /// </param>
             /// <param name='skip'>
             /// Number of entries to skip
             /// </param>
             /// <param name='limit'>
             /// Max number of entries to include in response. Default is 10.
             /// </param>
-            public static Reactions ListReactions(this ISerialized operations, string serializedTenantId = default(string), string status = "ALL", int? skip = 0, int? limit = 10)
+            public static Reactions ListReactions(this ISerialized operations, string serializedTenantId = default(string), string status = "ALL", string fromParameter = default(string), string to = default(string), string aggregateId = default(string), string eventId = default(string), int? skip = 0, int? limit = 10)
             {
-                return operations.ListReactionsAsync(serializedTenantId, status, skip, limit).GetAwaiter().GetResult();
+                return operations.ListReactionsAsync(serializedTenantId, status, fromParameter, to, aggregateId, eventId, skip, limit).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -905,6 +917,18 @@ namespace SerializedClient
             /// Status to filter. Possible values are: SCHEDULED, READY, ONGOING,
             /// COMPLETED, CANCELED, FAILED.
             /// </param>
+            /// <param name='fromParameter'>
+            /// Filter 'triggerAt' timestamp from, inclusive.
+            /// </param>
+            /// <param name='to'>
+            /// Filter 'triggerAt' timestamp to, exclusive.
+            /// </param>
+            /// <param name='aggregateId'>
+            /// Filter by aggregate ID.
+            /// </param>
+            /// <param name='eventId'>
+            /// Filter by event ID.
+            /// </param>
             /// <param name='skip'>
             /// Number of entries to skip
             /// </param>
@@ -914,9 +938,9 @@ namespace SerializedClient
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task<Reactions> ListReactionsAsync(this ISerialized operations, string serializedTenantId = default(string), string status = "ALL", int? skip = 0, int? limit = 10, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task<Reactions> ListReactionsAsync(this ISerialized operations, string serializedTenantId = default(string), string status = "ALL", string fromParameter = default(string), string to = default(string), string aggregateId = default(string), string eventId = default(string), int? skip = 0, int? limit = 10, CancellationToken cancellationToken = default(CancellationToken))
             {
-                using (var _result = await operations.ListReactionsWithHttpMessagesAsync(serializedTenantId, status, skip, limit, null, cancellationToken).ConfigureAwait(false))
+                using (var _result = await operations.ListReactionsWithHttpMessagesAsync(serializedTenantId, status, fromParameter, to, aggregateId, eventId, skip, limit, null, cancellationToken).ConfigureAwait(false))
                 {
                     return _result.Body;
                 }
@@ -1102,9 +1126,12 @@ namespace SerializedClient
             /// <param name='reactionName'>
             /// The reaction name
             /// </param>
-            public static void DeleteReactionDefinition(this ISerialized operations, string reactionName)
+            /// <param name='keepScheduledReactions'>
+            /// Keep existing scheduled reactions
+            /// </param>
+            public static void DeleteReactionDefinition(this ISerialized operations, string reactionName, bool? keepScheduledReactions = false)
             {
-                operations.DeleteReactionDefinitionAsync(reactionName).GetAwaiter().GetResult();
+                operations.DeleteReactionDefinitionAsync(reactionName, keepScheduledReactions).GetAwaiter().GetResult();
             }
 
             /// <summary>
@@ -1116,12 +1143,15 @@ namespace SerializedClient
             /// <param name='reactionName'>
             /// The reaction name
             /// </param>
+            /// <param name='keepScheduledReactions'>
+            /// Keep existing scheduled reactions
+            /// </param>
             /// <param name='cancellationToken'>
             /// The cancellation token.
             /// </param>
-            public static async Task DeleteReactionDefinitionAsync(this ISerialized operations, string reactionName, CancellationToken cancellationToken = default(CancellationToken))
+            public static async Task DeleteReactionDefinitionAsync(this ISerialized operations, string reactionName, bool? keepScheduledReactions = false, CancellationToken cancellationToken = default(CancellationToken))
             {
-                (await operations.DeleteReactionDefinitionWithHttpMessagesAsync(reactionName, null, cancellationToken).ConfigureAwait(false)).Dispose();
+                (await operations.DeleteReactionDefinitionWithHttpMessagesAsync(reactionName, keepScheduledReactions, null, cancellationToken).ConfigureAwait(false)).Dispose();
             }
 
             /// <summary>
@@ -1445,10 +1475,12 @@ namespace SerializedClient
             /// Reference string to filter on. See JsonPath 'setref' for details.
             /// </param>
             /// <param name='fromParameter'>
-            /// Filter reference value from. Usable if reference is a date or timestamp.
+            /// Filter reference value from, inclusive. Usable if reference is a date or
+            /// timestamp.
             /// </param>
             /// <param name='to'>
-            /// Filter reference value to. Usable if reference is a date or timestamp.
+            /// Filter reference value to, inclusive. Usable if reference is a date or
+            /// timestamp.
             /// </param>
             /// <param name='search'>
             /// String to search for. The projection has to be created with
@@ -1494,10 +1526,12 @@ namespace SerializedClient
             /// Reference string to filter on. See JsonPath 'setref' for details.
             /// </param>
             /// <param name='fromParameter'>
-            /// Filter reference value from. Usable if reference is a date or timestamp.
+            /// Filter reference value from, inclusive. Usable if reference is a date or
+            /// timestamp.
             /// </param>
             /// <param name='to'>
-            /// Filter reference value to. Usable if reference is a date or timestamp.
+            /// Filter reference value to, inclusive. Usable if reference is a date or
+            /// timestamp.
             /// </param>
             /// <param name='search'>
             /// String to search for. The projection has to be created with

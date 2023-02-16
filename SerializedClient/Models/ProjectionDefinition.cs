@@ -36,7 +36,9 @@ namespace SerializedClient.Models
         /// <param name="idField">Field in the event to use as the projection
         /// id. Defaults to the aggregate id.</param>
         /// <param name="description">Projection definition description</param>
-        /// <param name="indexedFields">Name of fields for </param>
+        /// <param name="indexedFields">Name of fields to index. Indexed fields
+        /// can be queried using the 'search' query parameter and the
+        /// /projections/single/{projectionName} endpoint</param>
         public ProjectionDefinition(string projectionName, string feedName, IList<Handler> handlers, bool? aggregated = default(bool?), string signingSecret = default(string), string idField = default(string), string description = default(string), IList<string> indexedFields = default(IList<string>))
         {
             ProjectionName = projectionName;
@@ -101,7 +103,9 @@ namespace SerializedClient.Models
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or sets name of fields for
+        /// Gets or sets name of fields to index. Indexed fields can be queried
+        /// using the 'search' query parameter and the
+        /// /projections/single/{projectionName} endpoint
         /// </summary>
         [JsonProperty(PropertyName = "indexedFields")]
         public IList<string> IndexedFields { get; set; }

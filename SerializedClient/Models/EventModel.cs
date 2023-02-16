@@ -23,6 +23,8 @@ namespace SerializedClient.Models
         /// <summary>
         /// Initializes a new instance of the EventModel class.
         /// </summary>
+        /// <param name="eventType">The domain event type, eg. PaymentProcessed
+        /// or OrderPlaced.</param>
         /// <param name="eventId">Optional eventId. Will be generated if
         /// omitted.</param>
         /// <param name="data">Optional user defined event data map</param>
@@ -49,6 +51,8 @@ namespace SerializedClient.Models
         public System.Guid? EventId { get; set; }
 
         /// <summary>
+        /// Gets or sets the domain event type, eg. PaymentProcessed or
+        /// OrderPlaced.
         /// </summary>
         [JsonProperty(PropertyName = "eventType")]
         public string EventType { get; set; }

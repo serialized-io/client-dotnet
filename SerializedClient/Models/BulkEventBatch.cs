@@ -12,25 +12,26 @@ namespace SerializedClient.Models
     using System.Collections.Generic;
     using System.Linq;
 
-    public partial class EventBatch
+    public partial class BulkEventBatch
     {
         /// <summary>
-        /// Initializes a new instance of the EventBatch class.
+        /// Initializes a new instance of the BulkEventBatch class.
         /// </summary>
-        public EventBatch()
+        public BulkEventBatch()
         {
             CustomInit();
         }
 
         /// <summary>
-        /// Initializes a new instance of the EventBatch class.
+        /// Initializes a new instance of the BulkEventBatch class.
         /// </summary>
-        /// <param name="events">Array of domain events</param>
+        /// <param name="aggregateId">The ID of the aggregate</param>
         /// <param name="expectedVersion">Optional version number enabling
         /// optimistic concurrency control in a multi-threaded
         /// scenario.</param>
-        public EventBatch(IList<EventModel> events, int? expectedVersion = default(int?))
+        public BulkEventBatch(System.Guid aggregateId, IList<EventModel> events, int? expectedVersion = default(int?))
         {
+            AggregateId = aggregateId;
             Events = events;
             ExpectedVersion = expectedVersion;
             CustomInit();
@@ -42,7 +43,12 @@ namespace SerializedClient.Models
         partial void CustomInit();
 
         /// <summary>
-        /// Gets or sets array of domain events
+        /// Gets or sets the ID of the aggregate
+        /// </summary>
+        [JsonProperty(PropertyName = "aggregateId")]
+        public System.Guid AggregateId { get; set; }
+
+        /// <summary>
         /// </summary>
         [JsonProperty(PropertyName = "events")]
         public IList<EventModel> Events { get; set; }

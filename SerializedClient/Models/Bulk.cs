@@ -6,6 +6,7 @@
 
 namespace SerializedClient.Models
 {
+    using Microsoft.Rest;
     using Newtonsoft.Json;
     using System.Collections;
     using System.Collections.Generic;
@@ -24,9 +25,10 @@ namespace SerializedClient.Models
         /// <summary>
         /// Initializes a new instance of the Bulk class.
         /// </summary>
-        public Bulk(IList<EventBatch> events = default(IList<EventBatch>))
+        /// <param name="batches">Array of domain event batches</param>
+        public Bulk(IList<BulkEventBatch> batches)
         {
-            Events = events;
+            Batches = batches;
             CustomInit();
         }
 
@@ -36,9 +38,33 @@ namespace SerializedClient.Models
         partial void CustomInit();
 
         /// <summary>
+        /// Gets or sets array of domain event batches
         /// </summary>
-        [JsonProperty(PropertyName = "events")]
-        public IList<EventBatch> Events { get; set; }
+        [JsonProperty(PropertyName = "batches")]
+        public IList<BulkEventBatch> Batches { get; set; }
 
+        /// <summary>
+        /// Validate the object.
+        /// </summary>
+        /// <exception cref="ValidationException">
+        /// Thrown if validation fails
+        /// </exception>
+        public virtual void Validate()
+        {
+            if (Batches == null)
+            {
+                throw new ValidationException(ValidationRules.CannotBeNull, "Batches");
+            }
+            if (Batches != null)
+            {
+                foreach (var element in Batches)
+                {
+                    if (element != null)
+                    {
+                        element.Validate();
+                    }
+                }
+            }
+        }
     }
 }

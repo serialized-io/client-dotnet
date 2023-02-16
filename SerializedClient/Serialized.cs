@@ -528,6 +528,10 @@ namespace SerializedClient
             {
                 throw new ValidationException(ValidationRules.CannotBeNull, "bulk");
             }
+            if (bulk != null)
+            {
+                bulk.Validate();
+            }
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
             string _invocationId = null;
@@ -2749,6 +2753,18 @@ namespace SerializedClient
         /// Status to filter. Possible values are: SCHEDULED, READY, ONGOING,
         /// COMPLETED, CANCELED, FAILED.
         /// </param>
+        /// <param name='fromParameter'>
+        /// Filter 'triggerAt' timestamp from, inclusive.
+        /// </param>
+        /// <param name='to'>
+        /// Filter 'triggerAt' timestamp to, exclusive.
+        /// </param>
+        /// <param name='aggregateId'>
+        /// Filter by aggregate ID.
+        /// </param>
+        /// <param name='eventId'>
+        /// Filter by event ID.
+        /// </param>
         /// <param name='skip'>
         /// Number of entries to skip
         /// </param>
@@ -2770,7 +2786,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse<Reactions>> ListReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), string status = "ALL", int? skip = 0, int? limit = 10, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse<Reactions>> ListReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), string status = "ALL", string fromParameter = default(string), string to = default(string), string aggregateId = default(string), string eventId = default(string), int? skip = 0, int? limit = 10, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             // Tracing
             bool _shouldTrace = ServiceClientTracing.IsEnabled;
@@ -2781,6 +2797,10 @@ namespace SerializedClient
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("serializedTenantId", serializedTenantId);
                 tracingParameters.Add("status", status);
+                tracingParameters.Add("fromParameter", fromParameter);
+                tracingParameters.Add("to", to);
+                tracingParameters.Add("aggregateId", aggregateId);
+                tracingParameters.Add("eventId", eventId);
                 tracingParameters.Add("skip", skip);
                 tracingParameters.Add("limit", limit);
                 tracingParameters.Add("cancellationToken", cancellationToken);
@@ -2793,6 +2813,22 @@ namespace SerializedClient
             if (status != null)
             {
                 _queryParameters.Add(string.Format("status={0}", System.Uri.EscapeDataString(status)));
+            }
+            if (fromParameter != null)
+            {
+                _queryParameters.Add(string.Format("from={0}", System.Uri.EscapeDataString(fromParameter)));
+            }
+            if (to != null)
+            {
+                _queryParameters.Add(string.Format("to={0}", System.Uri.EscapeDataString(to)));
+            }
+            if (aggregateId != null)
+            {
+                _queryParameters.Add(string.Format("aggregateId={0}", System.Uri.EscapeDataString(aggregateId)));
+            }
+            if (eventId != null)
+            {
+                _queryParameters.Add(string.Format("eventId={0}", System.Uri.EscapeDataString(eventId)));
             }
             if (skip != null)
             {
@@ -3446,6 +3482,9 @@ namespace SerializedClient
         /// <param name='reactionName'>
         /// The reaction name
         /// </param>
+        /// <param name='keepScheduledReactions'>
+        /// Keep existing scheduled reactions
+        /// </param>
         /// <param name='customHeaders'>
         /// Headers that will be added to request.
         /// </param>
@@ -3464,7 +3503,7 @@ namespace SerializedClient
         /// <return>
         /// A response object containing the response body and response headers.
         /// </return>
-        public async Task<HttpOperationResponse> DeleteReactionDefinitionWithHttpMessagesAsync(string reactionName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<HttpOperationResponse> DeleteReactionDefinitionWithHttpMessagesAsync(string reactionName, bool? keepScheduledReactions = false, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (reactionName == null)
             {
@@ -3485,6 +3524,7 @@ namespace SerializedClient
                 _invocationId = ServiceClientTracing.NextInvocationId.ToString();
                 Dictionary<string, object> tracingParameters = new Dictionary<string, object>();
                 tracingParameters.Add("reactionName", reactionName);
+                tracingParameters.Add("keepScheduledReactions", keepScheduledReactions);
                 tracingParameters.Add("cancellationToken", cancellationToken);
                 ServiceClientTracing.Enter(_invocationId, this, "DeleteReactionDefinition", tracingParameters);
             }
@@ -3492,6 +3532,15 @@ namespace SerializedClient
             var _baseUrl = BaseUri.AbsoluteUri;
             var _url = new System.Uri(new System.Uri(_baseUrl + (_baseUrl.EndsWith("/") ? "" : "/")), "reactions/definitions/{reactionName}").ToString();
             _url = _url.Replace("{reactionName}", System.Uri.EscapeDataString(reactionName));
+            List<string> _queryParameters = new List<string>();
+            if (keepScheduledReactions != null)
+            {
+                _queryParameters.Add(string.Format("keepScheduledReactions={0}", System.Uri.EscapeDataString(SafeJsonConvert.SerializeObject(keepScheduledReactions, SerializationSettings).Trim('"'))));
+            }
+            if (_queryParameters.Count > 0)
+            {
+                _url += "?" + string.Join("&", _queryParameters);
+            }
             // Create HTTP transport objects
             var _httpRequest = new HttpRequestMessage();
             HttpResponseMessage _httpResponse = null;
@@ -4722,10 +4771,12 @@ namespace SerializedClient
         /// Reference string to filter on. See JsonPath 'setref' for details.
         /// </param>
         /// <param name='fromParameter'>
-        /// Filter reference value from. Usable if reference is a date or timestamp.
+        /// Filter reference value from, inclusive. Usable if reference is a date or
+        /// timestamp.
         /// </param>
         /// <param name='to'>
-        /// Filter reference value to. Usable if reference is a date or timestamp.
+        /// Filter reference value to, inclusive. Usable if reference is a date or
+        /// timestamp.
         /// </param>
         /// <param name='search'>
         /// String to search for. The projection has to be created with

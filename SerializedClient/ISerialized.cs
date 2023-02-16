@@ -442,6 +442,18 @@ namespace SerializedClient
         /// Status to filter. Possible values are: SCHEDULED, READY, ONGOING,
         /// COMPLETED, CANCELED, FAILED.
         /// </param>
+        /// <param name='fromParameter'>
+        /// Filter 'triggerAt' timestamp from, inclusive.
+        /// </param>
+        /// <param name='to'>
+        /// Filter 'triggerAt' timestamp to, exclusive.
+        /// </param>
+        /// <param name='aggregateId'>
+        /// Filter by aggregate ID.
+        /// </param>
+        /// <param name='eventId'>
+        /// Filter by event ID.
+        /// </param>
         /// <param name='skip'>
         /// Number of entries to skip
         /// </param>
@@ -454,7 +466,7 @@ namespace SerializedClient
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse<Reactions>> ListReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), string status = "ALL", int? skip = 0, int? limit = 10, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse<Reactions>> ListReactionsWithHttpMessagesAsync(string serializedTenantId = default(string), string status = "ALL", string fromParameter = default(string), string to = default(string), string aggregateId = default(string), string eventId = default(string), int? skip = 0, int? limit = 10, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Delete a scheduled reaction
@@ -541,13 +553,16 @@ namespace SerializedClient
         /// <param name='reactionName'>
         /// The reaction name
         /// </param>
+        /// <param name='keepScheduledReactions'>
+        /// Keep existing scheduled reactions
+        /// </param>
         /// <param name='customHeaders'>
         /// The headers that will be added to request.
         /// </param>
         /// <param name='cancellationToken'>
         /// The cancellation token.
         /// </param>
-        Task<HttpOperationResponse> DeleteReactionDefinitionWithHttpMessagesAsync(string reactionName, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<HttpOperationResponse> DeleteReactionDefinitionWithHttpMessagesAsync(string reactionName, bool? keepScheduledReactions = false, Dictionary<string, List<string>> customHeaders = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Get reaction definition
@@ -698,12 +713,12 @@ namespace SerializedClient
         /// Reference string to filter on. See JsonPath 'setref' for details.
         /// </param>
         /// <param name='fromParameter'>
-        /// Filter reference value from. Usable if reference is a date or
-        /// timestamp.
+        /// Filter reference value from, inclusive. Usable if reference is a
+        /// date or timestamp.
         /// </param>
         /// <param name='to'>
-        /// Filter reference value to. Usable if reference is a date or
-        /// timestamp.
+        /// Filter reference value to, inclusive. Usable if reference is a date
+        /// or timestamp.
         /// </param>
         /// <param name='search'>
         /// String to search for. The projection has to be created with

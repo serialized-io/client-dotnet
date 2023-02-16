@@ -35,8 +35,9 @@ namespace SerializedClient.Models
         /// containing trigger time. If not specified, trigger time will be
         /// ASAP. Dot notation supported.</param>
         /// <param name="offset">Optional trigger time offset. Defined in the
-        /// ISO-8601 duration format (PnDTnHnMn.nS). May be negative.</param>
-        public ReactionDefinition(string reactionName, string feedName, string reactOnEventType, Action action, string description = default(string), IList<object> cancelOnEventTypes = default(IList<object>), string triggerTimeField = default(string), string offset = default(string))
+        /// ISO-8601 duration format (PnDTnHnMn.nS). May be negative if
+        /// 'triggerTimeField' is set.</param>
+        public ReactionDefinition(string reactionName, string feedName, string reactOnEventType, Action action, string description = default(string), IList<string> cancelOnEventTypes = default(IList<string>), string triggerTimeField = default(string), string offset = default(string))
         {
             ReactionName = reactionName;
             FeedName = feedName;
@@ -82,7 +83,7 @@ namespace SerializedClient.Models
         /// Gets or sets event types to cancel reaction scheduled in the future
         /// </summary>
         [JsonProperty(PropertyName = "cancelOnEventTypes")]
-        public IList<object> CancelOnEventTypes { get; set; }
+        public IList<string> CancelOnEventTypes { get; set; }
 
         /// <summary>
         /// Gets or sets optional path to event data field containing trigger
@@ -94,7 +95,8 @@ namespace SerializedClient.Models
 
         /// <summary>
         /// Gets or sets optional trigger time offset. Defined in the ISO-8601
-        /// duration format (PnDTnHnMn.nS). May be negative.
+        /// duration format (PnDTnHnMn.nS). May be negative if
+        /// 'triggerTimeField' is set.
         /// </summary>
         [JsonProperty(PropertyName = "offset")]
         public string Offset { get; set; }

@@ -22,6 +22,8 @@ namespace SerializedClient.Models
         /// <summary>
         /// Initializes a new instance of the ProjectionInfo class.
         /// </summary>
+        /// <param name="feedName">The aggregate type the projection definition
+        /// feeds from</param>
         /// <param name="aggregated">True if the projection is aggregated,
         /// false if single.</param>
         /// <param name="projectionsCount">Number of projections</param>
@@ -49,6 +51,8 @@ namespace SerializedClient.Models
         public string ProjectionName { get; set; }
 
         /// <summary>
+        /// Gets or sets the aggregate type the projection definition feeds
+        /// from
         /// </summary>
         [JsonProperty(PropertyName = "feedName")]
         public string FeedName { get; set; }
