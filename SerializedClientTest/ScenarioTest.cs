@@ -56,6 +56,8 @@ namespace SerializedClientTest
 
                 getAndVerifyOrderProjections(client);
 
+                searchAndVerifyIndexedOrderProjections(client);
+
                 getAndVerifyOrderTotalsProjection(client);
 
                 filterOrderProjectionsByReference(client, "PAID");
@@ -129,18 +131,21 @@ namespace SerializedClientTest
             var definition = new ProjectionDefinition();
             definition.ProjectionName = projectionName;
             definition.FeedName = orderType;
+            definition.IndexedFields = new List<String>();
+            definition.IndexedFields.Add("customerId");
             definition.Handlers = new List<Handler>();
             definition.Handlers.Add(new Handler(eventType: "OrderPlaced", functions: new List<Function>()
             {
-                 new Function(functionProperty: "set", targetSelector: "$.projection.status", rawData: "PLACED"),
-                 new Function(functionProperty: "setref", targetSelector: "$.projection.status"),
-                 new Function(functionProperty: "set", targetSelector: "$.projection.orderAmount", eventSelector: "$.event.orderAmount")
+                new Function(functionProperty: "merge"),
+                new Function(functionProperty: "set", targetSelector: "$.projection.status", rawData: "PLACED"),
+                new Function(functionProperty: "setref", targetSelector: "$.projection.status")
             }));
 
             definition.Handlers.Add(new Handler(eventType: "OrderPaid", functions: new List<Function>()
             {
-                 new Function(functionProperty: "set", targetSelector: "$.projection.status", rawData: "PAID"),
-                 new Function(functionProperty: "setref", targetSelector: "$.projection.status")
+                new Function(functionProperty: "merge"),
+                new Function(functionProperty: "set", targetSelector: "$.projection.status", rawData: "PAID"),
+                new Function(functionProperty: "setref", targetSelector: "$.projection.status")
             }));
 
             return definition;
@@ -170,7 +175,7 @@ namespace SerializedClientTest
             {
                 new EventModel("OrderPlaced", Guid.NewGuid(), new Dictionary<string, object>()
                 {
-                    {"customerId", "some-test-id-1"},
+                    {"customerId", "abc1234"},
                     {"orderAmount", 12345},
                     {"placedAt", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}
                 }
@@ -181,7 +186,7 @@ namespace SerializedClientTest
             {
                 new EventModel("OrderPaid", Guid.NewGuid(), new Dictionary<string, object>()
                 {
-                    {"customerId", "some-test-id-1"},
+                    {"customerId", "abc1234"},
                     {"paidAt", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}
                 })
             }, 1));
@@ -190,7 +195,7 @@ namespace SerializedClientTest
             {
                 new EventModel("OrderPlaced", Guid.NewGuid(), new Dictionary<string, object>()
                 {
-                    {"customerId", "some-test-id-2"},
+                    {"customerId", "abc4567"},
                     {"orderAmount", 67890},
                     {"placedAt", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()}
                 }
@@ -259,7 +264,7 @@ namespace SerializedClientTest
 
             var eventData = (JObject)eventEnumerator.Current.Data;
             Assert.AreEqual("OrderPlaced", eventEnumerator.Current.EventType);
-            Assert.AreEqual("some-test-id-1", eventData["customerId"]);
+            Assert.AreEqual("abc1234", eventData["customerId"]);
             Assert.AreEqual(12345, eventData["orderAmount"]);
             Assert.IsNotNull(eventData["placedAt"]);
 
@@ -271,7 +276,7 @@ namespace SerializedClientTest
 
             eventData = (JObject)eventEnumerator.Current.Data;
             Assert.AreEqual("OrderPaid", eventEnumerator.Current.EventType);
-            Assert.AreEqual("some-test-id-1", eventData["customerId"]);
+            Assert.AreEqual("abc1234", eventData["customerId"]);
             Assert.IsNotNull(eventData["paidAt"]);
 
             // Third
@@ -282,7 +287,7 @@ namespace SerializedClientTest
 
             eventData = (JObject)eventEnumerator.Current.Data;
             Assert.AreEqual("OrderPlaced", eventEnumerator.Current.EventType);
-            Assert.AreEqual("some-test-id-2", eventData["customerId"]);
+            Assert.AreEqual("abc4567", eventData["customerId"]);
             Assert.AreEqual(67890, eventData["orderAmount"]);
             Assert.IsNotNull(eventData["placedAt"]);
         }
@@ -313,6 +318,16 @@ namespace SerializedClientTest
             projectionData = (JObject)order.Data;
             Assert.AreEqual(67890, projectionData["orderAmount"]);
             Assert.AreEqual("PLACED", projectionData["status"]);
+        }
+
+        private void searchAndVerifyIndexedOrderProjections(Serialized client)
+        {
+            Debug.WriteLine("Searching indexed projections: " + ordersProjections);
+
+            // Verify list
+            var orders = client.ListSingleProjections(ordersProjections, search: "abc*");
+            Assert.AreEqual(false, orders.HasMore);
+            Assert.AreEqual(2, orders.ProjectionsProperty.Count);
         }
 
         private void filterOrderProjectionsByReference(Serialized client, string reference)
